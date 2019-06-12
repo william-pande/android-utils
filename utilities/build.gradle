@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.WilliamPande.android-utils'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+ext {
+    retrofitVersion = '2.3.0'
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    api 'com.google.android.material:material:1.0.0'
+    api 'androidx.appcompat:appcompat:1.0.2'
+
+    // retrofit
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
+    api 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+    api "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+
+    //okhttp
+    api 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    api 'com.squareup.okhttp3:okhttp:3.10.0'
+
+    //RxJava
+    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    api 'io.reactivex.rxjava2:rxjava:2.2.2'
+
+    api 'id.zelory:compressor:2.1.0'
+
+    api 'com.squareup.picasso:picasso:2.71828'
+
+    /*for easy preference management*/
+    api 'com.pixplicity.easyprefs:library:1.8.1@aar'
+
+    api 'com.github.joielechong:countrycodepicker:2.3.0'
+
+    testImplementation 'junit:junit:4.12'
+    implementation 'org.jetbrains:annotations:15.0'
+}
