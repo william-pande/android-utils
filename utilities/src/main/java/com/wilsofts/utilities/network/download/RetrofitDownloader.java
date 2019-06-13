@@ -19,6 +19,10 @@ public class RetrofitDownloader extends AsyncTask<ResponseBody, Long, String> {
     private final DownloadResponse downloadResponse;
     private final File target_path;
 
+    public RetrofitDownloader(Call<ResponseBody> call, File target_path, DownloadResponse downloadResponse) {
+        this(call, downloadResponse, target_path);
+    }
+
     public RetrofitDownloader(Call<ResponseBody> call, DownloadResponse downloadResponse, File target_path) {
         this.downloadResponse = downloadResponse;
         this.target_path = target_path;
