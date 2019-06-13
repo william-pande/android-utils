@@ -9,4 +9,14 @@
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
+
+    <style name="AppTheme.DialogActivity" parent="Theme.AppCompat.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 </resources>

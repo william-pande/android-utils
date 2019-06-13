@@ -1,5 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wilsofts.utilities" >
+    package="com.wilsofts.utilities">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application>
+        <activity
+            android:theme="@style/AppTheme.DialogActivity"
+            android:name=".ConfirmDialogActivity" />
+    </application>
+
 </manifest>

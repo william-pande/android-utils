@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 
 public class LibUtils {
     private static final String TAG = "LIB UTILS";
+    public static boolean SHOW_LOG = true;
+
     public static String URL_LINK = "";
     public static String AUTHORIZATION_BEARER = "";
 
@@ -73,11 +75,15 @@ public class LibUtils {
     }
 
     public static void logE(String s) {
-        Log.e(LibUtils.TAG, s);
+        if (LibUtils.SHOW_LOG) {
+            Log.e(LibUtils.TAG, s);
+        }
     }
 
     public static void logE(Throwable throwable) {
-        Log.e(LibUtils.TAG, throwable.getMessage(), throwable);
+        if (LibUtils.SHOW_LOG) {
+            Log.e(LibUtils.TAG, throwable.getMessage(), throwable);
+        }
     }
 
     public static void restart(@NonNull Intent intent, @NonNull Context context) {
@@ -154,7 +160,25 @@ public class LibUtils {
         return format.format(date);
     }
 
+    @NotNull
+    public static String shortDate(long timestamp) {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat format = new SimpleDateFormat("dd EEE MMM yyyy");
+        Date date = new Date(timestamp * 1000);
+        return format.format(date);
+    }
+
     public static String formatDouble(double number) {
         return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
+    }
+
+    public static String formatNumber(double number) {
+        @SuppressLint("DefaultLocale")
+        String formatted = String.format("%,.2f", number);
+        if (formatted.endsWith(".00"))
+            return formatted.substring(0, formatted.length() - 3);
+        else if (formatted.contains(".") && formatted.endsWith("0"))
+            return formatted.substring(0, formatted.length() - 2);
+        return formatted;
     }
 }
