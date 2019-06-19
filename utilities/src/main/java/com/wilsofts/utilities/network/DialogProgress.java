@@ -52,7 +52,7 @@ public class DialogProgress extends DialogFragment {
         ProgressBar progress_circular = view.findViewById(R.id.progress_circular);
 
         progress_circular.getIndeterminateDrawable().setColorFilter(
-                ContextCompat.getColor(Objects.requireNonNull(this.getActivity()), R.color.colorPrimaryDark),
+                ContextCompat.getColor(Objects.requireNonNull(this.getActivity()), R.color.alert_dialog_text_color),
                 PorterDuff.Mode.SRC_IN);
 
         ((TextView) view.findViewById(R.id.dialog_title)).setText(Objects.requireNonNull(arguments).getString("title"));

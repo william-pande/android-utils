@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingBottom="20dp"
-    tools:context=".ConfirmDialogActivity">
+    tools:context=".dialogs.ConfirmDialogActivity">
 
     <TextView
         android:id="@+id/dialog_title"

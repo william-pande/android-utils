@@ -1,4 +1,4 @@
-package com.wilsofts.utilities;
+package com.wilsofts.utilities.dialogs;
 
 import android.app.Dialog;
 import android.graphics.Point;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+
+import com.wilsofts.utilities.R;
 
 import java.util.Objects;
 
@@ -37,7 +39,6 @@ public class UserAlert extends DialogFragment {
                 R.style.MyDialogTheme);
 
         Bundle arguments = this.getArguments();
-
         builder
                 .setMessage(Objects.requireNonNull(arguments).getString("message"))
                 .setTitle(Objects.requireNonNull(arguments).getString("title"))

@@ -1,4 +1,4 @@
-package com.wilsofts.utilities;
+package com.wilsofts.utilities.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.wilsofts.utilities.LibUtils;
+import com.wilsofts.utilities.R;
 
 public class ConfirmDialogActivity extends AppCompatActivity {
 

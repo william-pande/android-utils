@@ -3,9 +3,9 @@
 
     <style name="MyDialogTheme">
         <!--buttons color-->
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <!--title and message color-->
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/alert_dialog_text_color</item>
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>

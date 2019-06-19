@@ -7,7 +7,7 @@
     <application>
         <activity
             android:theme="@style/AppTheme.DialogActivity"
-            android:name=".ConfirmDialogActivity" />
+            android:name=".dialogs.ConfirmDialogActivity" />
     </application>
 
 </manifest>

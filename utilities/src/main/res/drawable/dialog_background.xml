@@ -3,12 +3,12 @@
     android:shape="rectangle">
 
     <!-- view background color -->
-    <solid android:color="@color/colorPrimary" />
+    <solid android:color="@color/alert_dialog_background" />
 
     <!-- view border color and width -->
     <stroke
-        android:width="2dp"
-        android:color="@color/colorPrimaryDark" />
+        android:width="@dimen/alert_dialog_stroke_width"
+        android:color="@color/alert_dialog_border" />
 
     <!-- If you want to add some padding -->
     <padding
@@ -18,5 +18,5 @@
         android:bottom="4dp" />
 
     <!-- Here is the corner radius -->
-    <corners android:radius="5dp" />
+    <corners android:radius="@dimen/alert_dialog_radius" />
 </shape>

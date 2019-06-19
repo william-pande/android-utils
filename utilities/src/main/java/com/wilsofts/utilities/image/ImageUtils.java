@@ -1,4 +1,4 @@
-package com.wilsofts.utilities;
+package com.wilsofts.utilities.image;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
