@@ -61,8 +61,10 @@ dependencies {
     api 'io.reactivex.rxjava2:rxandroid:2.1.0'
     api 'io.reactivex.rxjava2:rxjava:2.2.2'
 
+    /*image compressor*/
     api 'id.zelory:compressor:2.1.0'
 
+    //Image processor library  created by Square.Inc
     api 'com.squareup.picasso:picasso:2.71828'
 
     /*for easy preference management*/

@@ -32,6 +32,24 @@ public class UserAlert extends DialogFragment {
         alert.show(activity.getSupportFragmentManager(), "missiles");
     }
 
+    public static void showAlert(FragmentActivity activity, String message, int type) {
+        UserAlert alert = new UserAlert();
+        Bundle arguments = new Bundle();
+        String title = "Alert";
+        if (type == UserAlert.ERROR) {
+            title = activity.getString(R.string.error);
+        } else if (type == UserAlert.SUCCESS) {
+            title = activity.getString(R.string.success);
+        } else if (type == UserAlert.INFO) {
+            title = activity.getString(R.string.info);
+        }
+        arguments.putString("title", title);
+        arguments.putString("message", message);
+        arguments.putInt("type", type);
+        alert.setArguments(arguments);
+        alert.show(activity.getSupportFragmentManager(), "missiles");
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
