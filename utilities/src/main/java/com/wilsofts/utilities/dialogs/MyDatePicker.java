@@ -84,4 +84,8 @@ public class MyDatePicker extends DialogFragment implements DatePickerDialog.OnD
         DialogFragment newFragment = new MyDatePicker();
         newFragment.show(fragmentManager, "date_picker");
     }
+
+    public static void showDatePickerDialog(FragmentManager fragmentManager, MyDatePicker datePicker) {
+        datePicker.show(fragmentManager, "date_picker");
+    }
 }

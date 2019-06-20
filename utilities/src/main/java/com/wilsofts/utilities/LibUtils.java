@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -16,15 +17,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -84,6 +95,14 @@ public class LibUtils {
         if (LibUtils.SHOW_LOG) {
             Log.e(LibUtils.TAG, throwable.getMessage(), throwable);
         }
+    }
+
+    public static void showToast(FragmentActivity activity, String toast) {
+        Toast.makeText(activity, toast, Toast.LENGTH_LONG).show();
+    }
+
+    public static void showErrorToast(FragmentActivity activity) {
+        LibUtils.showToast(activity, activity.getString(R.string.request_unsuccessful));
     }
 
     public static void restart(@NonNull Intent intent, @NonNull Context context) {
@@ -155,7 +174,7 @@ public class LibUtils {
     @NotNull
     public static String shortDateTime(long timestamp) {
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat format = new SimpleDateFormat("dd EEE MMM yyyy hh:mm:ss a");
+        SimpleDateFormat format = new SimpleDateFormat("dd EEE MMM, yyyy hh:mm:ss a");
         Date date = new Date(timestamp * 1000);
         return format.format(date);
     }
@@ -163,7 +182,7 @@ public class LibUtils {
     @NotNull
     public static String shortDate(long timestamp) {
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat format = new SimpleDateFormat("dd EEE MMM yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd EEE MMM, yyyy");
         Date date = new Date(timestamp * 1000);
         return format.format(date);
     }
@@ -180,5 +199,66 @@ public class LibUtils {
         else if (formatted.contains(".") && formatted.endsWith("0"))
             return formatted.substring(0, formatted.length() - 2);
         return formatted;
+    }
+
+    public static long longDateToMillis(String string_date) {
+        if (string_date == null) {
+            return 0;
+        }
+
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = simpleDateFormat.parse(string_date);
+            return date.getTime() / 1000;
+        } catch (ParseException e) {
+            LibUtils.logE(e);
+        }
+        return 0;
+    }
+
+    public static void confirmaAlert(Context context, String title, String message, int code) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+
+        builder.setPositiveButton("Proceed",
+                (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent intent = new Intent("app_receiver");
+                    intent.putExtra("code", code);
+                    intent.putExtra("proceed", true);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public static void extractDatabase(Context context, String database_name) {
+        try {
+            File storage_file = Environment.getExternalStorageDirectory();
+
+            if (storage_file.canWrite()) {
+                String database_path = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ?
+                        context.getFilesDir().getAbsolutePath().replace("files", "databases") + File.separator :
+                        context.getFilesDir().getPath() + context.getPackageName() + "/databases/";
+
+                File current_database_file = new File(database_path, database_name);
+                File backup_database_file = new File(storage_file, database_name + ".db");
+
+                if (current_database_file.exists()) {
+                    FileChannel source_file_channel = new FileInputStream(current_database_file).getChannel();
+                    FileChannel destination_file_channel = new FileOutputStream(backup_database_file).getChannel();
+                    destination_file_channel.transferFrom(source_file_channel, 0, source_file_channel.size());
+                    source_file_channel.close();
+                    destination_file_channel.close();
+                }
+            }
+        } catch (IOException e) {
+            LibUtils.logE(e);
+        }
     }
 }
