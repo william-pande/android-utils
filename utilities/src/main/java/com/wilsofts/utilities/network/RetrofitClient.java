@@ -116,9 +116,9 @@ public class RetrofitClient {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(LibUtils.CONNECT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(LibUtils.WRITE_TIMEOUT, TimeUnit.SECONDS)
+                .readTimeout(LibUtils.READ_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(chain -> {
                     Request request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer " + LibUtils.AUTHORIZATION_BEARER).build();

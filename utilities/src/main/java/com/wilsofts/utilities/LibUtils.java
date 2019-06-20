@@ -45,6 +45,11 @@ public class LibUtils {
     private static final String TAG = "LIB UTILS";
     public static boolean SHOW_LOG = true;
 
+    public static int CONNECT_TIMEOUT = 10;
+    public static int READ_TIMEOUT = 10;
+    public static int WRITE_TIMEOUT = 10;
+
+
     public static String URL_LINK = "";
     public static String AUTHORIZATION_BEARER = "";
 
@@ -130,9 +135,19 @@ public class LibUtils {
         return !name.matches(expression);
     }
 
+    public static String formatPhoneNumber(String country_code, String phone_number) {
+        phone_number = phone_number.replaceAll("\\D", "");
+
+        if (phone_number.startsWith("0")) {
+            phone_number = phone_number.substring(1);
+        } else if (phone_number.startsWith(country_code)) {
+            phone_number = phone_number.substring(country_code.length());
+        }
+        return country_code + phone_number;
+    }
+
     public static boolean invalidPhoneNumber(@NonNull String number) {
-        //256703683125
-        return number.length() < 12 || !android.util.Patterns.PHONE.matcher(number).matches();
+        return number.length() < 12 || number.length() > 16;
     }
 
     public static boolean invalidDouble(String number) {
