@@ -187,21 +187,7 @@ public class LibUtils {
         return format.format(date);
     }
 
-    public static String formatDouble(double number) {
-        return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
-    }
-
-    public static String formatNumber(double number) {
-        @SuppressLint("DefaultLocale")
-        String formatted = String.format("%,.2f", number);
-        if (formatted.endsWith(".00"))
-            return formatted.substring(0, formatted.length() - 3);
-        else if (formatted.contains(".") && formatted.endsWith("0"))
-            return formatted.substring(0, formatted.length() - 2);
-        return formatted;
-    }
-
-    public static long longDateToMillis(String string_date) {
+    public static long dateLongToMillis(String string_date) {
         if (string_date == null) {
             return 0;
         }
@@ -215,6 +201,46 @@ public class LibUtils {
             LibUtils.logE(e);
         }
         return 0;
+    }
+
+    public static String dateLongToString(String date) {
+        long timestamp = LibUtils.dateLongToMillis(date);
+        return LibUtils.shortDate(timestamp);
+    }
+
+    public static long dateShortToMillis(String string_date) {
+        if (string_date == null) {
+            return 0;
+        }
+
+        try {
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = simpleDateFormat.parse(string_date);
+            return date.getTime() / 1000;
+        } catch (ParseException e) {
+            LibUtils.logE(e);
+        }
+        return 0;
+    }
+
+    public static String dateShortToString(String date) {
+        long timestamp = LibUtils.dateShortToMillis(date);
+        return LibUtils.shortDate(timestamp);
+    }
+
+    public static String formatDouble(double number) {
+        return NumberFormat.getNumberInstance(Locale.getDefault()).format(number);
+    }
+
+    public static String formatNumber(double number) {
+        @SuppressLint("DefaultLocale")
+        String formatted = String.format("%,.2f", number);
+        if (formatted.endsWith(".00"))
+            return formatted.substring(0, formatted.length() - 3);
+        else if (formatted.contains(".") && formatted.endsWith("0"))
+            return formatted.substring(0, formatted.length() - 2);
+        return formatted;
     }
 
     public static void confirmaAlert(Context context, String title, String message, int code) {
