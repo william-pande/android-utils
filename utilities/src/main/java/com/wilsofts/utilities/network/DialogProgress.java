@@ -1,6 +1,7 @@
 package com.wilsofts.utilities.network;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -70,6 +72,8 @@ public class DialogProgress extends DialogFragment {
             display.getSize(point);
             window.setLayout((int) (point.x * 0.8), ViewGroup.LayoutParams.WRAP_CONTENT);
             window.setGravity(Gravity.CENTER);
+
+           window.setBackgroundDrawableResource(android.R.color.transparent);
         }
     }
 

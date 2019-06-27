@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
@@ -39,6 +40,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class LibUtils {
@@ -202,6 +204,13 @@ public class LibUtils {
         return format.format(date);
     }
 
+    public static String getTime(long timestamp) {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss a");
+        Date date = new Date(timestamp * 1000);
+        return format.format(date);
+    }
+
     public static long dateLongToMillis(String string_date) {
         if (string_date == null) {
             return 0;
@@ -296,6 +305,54 @@ public class LibUtils {
                     destination_file_channel.transferFrom(source_file_channel, 0, source_file_channel.size());
                     source_file_channel.close();
                     destination_file_channel.close();
+                }
+            }
+        } catch (IOException e) {
+            LibUtils.logE(e);
+        }
+    }
+
+    public static void listBundle(Intent intent) {
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+                LibUtils.logE(String.format("%s %s (%s)", key, Objects.requireNonNull(value).toString(), value.getClass().getName()));
+            }
+        }
+    }
+
+    public static void listIntentData(Intent intent){
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+               LibUtils.logE(String.format("%s %s (%s)", key, Objects.requireNonNull(value).toString(), value.getClass().getName()));
+            }
+        }
+    }
+
+    public static void writeDBToSD(Context context, String db_name) {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+                String DB_PATH;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    DB_PATH = context.getFilesDir().getAbsolutePath().replace("files", "databases") + File.separator;
+                } else {
+                    DB_PATH = context.getFilesDir().getPath() + context.getPackageName() + "/databases/";
+                }
+
+                File currentDB = new File(DB_PATH, db_name);
+                File backupDB = new File(sd, db_name);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
                 }
             }
         } catch (IOException e) {
