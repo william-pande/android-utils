@@ -8,12 +8,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.squareup.picasso.Picasso;
 import com.wilsofts.utilities.LibUtils;
 import com.wilsofts.utilities.R;
 
+
+@Deprecated
 public class ConfirmDialogActivity extends AppCompatActivity {
 
+    @Deprecated
     public static Intent confirm(Context context, String title, String message) {
         Intent intent = new Intent(context, ConfirmDialogActivity.class);
 

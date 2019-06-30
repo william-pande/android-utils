@@ -288,14 +288,14 @@ public class LibUtils {
         dialog.show();
     }
 
-    public static void confirmAlert(DialogResponse dialogResponse, Context context, String title, String message) {
-        LibUtils.confirmAlert(dialogResponse,
+    public static void confirmDialog(Context context, String title, String message, DialogResponse dialogResponse) {
+        LibUtils.confirmDialog(
                 context, title, message,
                 context.getString(R.string.cancel),
-                context.getString(R.string.cancel));
+                context.getString(R.string.cancel), dialogResponse);
     }
 
-    public static void confirmAlert(DialogResponse dialogResponse, Context context, String title, String message, String ok, String cancel) {
+    public static void confirmDialog(Context context, String title, String message, String ok, String cancel, DialogResponse dialogResponse) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
         builder.setTitle(title);
         builder.setMessage(message);
