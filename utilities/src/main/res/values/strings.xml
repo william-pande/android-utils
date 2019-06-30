@@ -5,4 +5,5 @@
     <string name="success">Success</string>
     <string name="info">Information</string>
     <string name="request_unsuccessful">Request could not be executed successfully</string>
+    <string name="cancel">Cancel</string>
 </resources>

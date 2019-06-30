@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.wilsofts.utilities.dialogs.DialogResponse;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -287,6 +288,33 @@ public class LibUtils {
         dialog.show();
     }
 
+    public static void confirmAlert(DialogResponse dialogResponse, Context context, String title, String message) {
+        LibUtils.confirmAlert(dialogResponse,
+                context, title, message,
+                context.getString(R.string.cancel),
+                context.getString(R.string.cancel));
+    }
+
+    public static void confirmAlert(DialogResponse dialogResponse, Context context, String title, String message, String ok, String cancel) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setNegativeButton(cancel, (dialog, which) -> {
+            dialog.dismiss();
+            dialogResponse.response(false);
+        });
+
+        builder.setPositiveButton(ok,
+                (dialog, which) -> {
+                    dialog.dismiss();
+                    dialogResponse.response(true);
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public static void extractDatabase(Context context, String database_name) {
         try {
             File storage_file = Environment.getExternalStorageDirectory();
@@ -322,12 +350,12 @@ public class LibUtils {
         }
     }
 
-    public static void listIntentData(Intent intent){
+    public static void listIntentData(Intent intent) {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             for (String key : bundle.keySet()) {
                 Object value = bundle.get(key);
-               LibUtils.logE(String.format("%s %s (%s)", key, Objects.requireNonNull(value).toString(), value.getClass().getName()));
+                LibUtils.logE(String.format("%s %s (%s)", key, Objects.requireNonNull(value).toString(), value.getClass().getName()));
             }
         }
     }
