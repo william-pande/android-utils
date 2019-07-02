@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,11 +21,13 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.wilsofts.utilities.dialogs.DialogResponse;
@@ -291,7 +294,7 @@ public class LibUtils {
     public static void confirmDialog(Context context, String title, String message, DialogResponse dialogResponse) {
         LibUtils.confirmDialog(
                 context, title, message,
-                context.getString(R.string.cancel),
+                context.getString(R.string.proceed),
                 context.getString(R.string.cancel), dialogResponse);
     }
 
@@ -385,6 +388,24 @@ public class LibUtils {
             }
         } catch (IOException e) {
             LibUtils.logE(e);
+        }
+    }
+
+    public static class RecyclerViewSpacing extends RecyclerView.ItemDecoration {
+        private final int mItemOffset;
+
+        public RecyclerViewSpacing(int itemOffset) {
+            this.mItemOffset = itemOffset;
+        }
+
+        public RecyclerViewSpacing(@NonNull Context context, @DimenRes int itemOffsetId) {
+            this(context.getResources().getDimensionPixelSize(itemOffsetId));
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            outRect.set(this.mItemOffset, this.mItemOffset, this.mItemOffset, this.mItemOffset);
         }
     }
 }
