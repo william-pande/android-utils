@@ -134,6 +134,7 @@ public class RetrofitClient {
                             builder.addHeader(name, Objects.requireNonNull(bundle.getString(name)));
                         }
                     }
+
                     return chain.proceed(builder.build());
                 }).build();
 
