@@ -1,5 +1,8 @@
 package com.wilsofts.utilities.network;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -13,8 +16,10 @@ import org.json.JSONObject;
 
 import java.net.SocketTimeoutException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -111,7 +116,8 @@ public class RetrofitClient {
         });
     }
 
-    public static Retrofit getRetrofitInstance() {
+    public static Retrofit getRetrofitInstance(@NonNull Intent headers, String url) {
+        LibUtils.logE(url);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -119,19 +125,36 @@ public class RetrofitClient {
                 .connectTimeout(LibUtils.CONNECT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(LibUtils.WRITE_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(LibUtils.READ_TIMEOUT, TimeUnit.SECONDS)
-                .addInterceptor(chain -> {
-                    Request request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " + LibUtils.AUTHORIZATION_BEARER).build();
-                    return chain.proceed(request);
+                .addInterceptor((Interceptor.Chain chain) -> {
+                    Request.Builder builder = chain.request().newBuilder();
+
+                    Bundle bundle = headers.getExtras();
+                    assert bundle != null;
+                    for (String name : bundle.keySet()) {
+                        builder.addHeader(name, Objects.requireNonNull(bundle.getString(name)));
+                    }
+                    return chain.proceed(builder.build());
                 }).build();
 
         return new Retrofit.Builder()
-                .baseUrl(LibUtils.URL_LINK)
+                .baseUrl(url)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();
+    }
+
+    public static Retrofit getRetrofitInstance(Intent headers) {
+        return RetrofitClient.getRetrofitInstance(headers, LibUtils.URL_LINK);
+    }
+
+    public static Retrofit getRetrofitInstance(String url) {
+        return RetrofitClient.getRetrofitInstance(new Intent(), url);
+    }
+
+    public static Retrofit getRetrofitInstance() {
+        return RetrofitClient.getRetrofitInstance(new Intent(), LibUtils.URL_LINK);
     }
 
     public static RequestBody getBody(Map<String, Object> parameters) {
