@@ -129,9 +129,10 @@ public class RetrofitClient {
                     Request.Builder builder = chain.request().newBuilder();
 
                     Bundle bundle = headers.getExtras();
-                    assert bundle != null;
-                    for (String name : bundle.keySet()) {
-                        builder.addHeader(name, Objects.requireNonNull(bundle.getString(name)));
+                    if (bundle != null) {
+                        for (String name : bundle.keySet()) {
+                            builder.addHeader(name, Objects.requireNonNull(bundle.getString(name)));
+                        }
                     }
                     return chain.proceed(builder.build());
                 }).build();
