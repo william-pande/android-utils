@@ -76,6 +76,15 @@ public class LibUtils {
         return activeNetworkInfo == null;
     }
 
+    public static boolean noInternetConnection(@NonNull Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = null;
+        if (connectivityManager != null) {
+            activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+        return activeNetworkInfo == null;
+    }
+
     public static void showError(CoordinatorLayout coordinatorLayout, String error) {
         Snackbar snackbar = Snackbar.make(coordinatorLayout, error, Snackbar.LENGTH_LONG);
 

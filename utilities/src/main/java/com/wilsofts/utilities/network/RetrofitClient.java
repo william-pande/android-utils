@@ -14,6 +14,9 @@ import com.wilsofts.utilities.LibUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +26,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,9 +73,7 @@ public class RetrofitClient {
             }
         } catch (JSONException e) {
             LibUtils.logE(e);
-            if (RetrofitClient.this.coordinatorLayout != null) {
-                LibUtils.showError(RetrofitClient.this.coordinatorLayout, e.getMessage());
-            }
+            LibUtils.showError(RetrofitClient.this.coordinatorLayout, e.getMessage());
         }
 
         if (this.show_progress && this.activity != null && this.dialog != null) {
@@ -111,6 +113,65 @@ public class RetrofitClient {
                     if (RetrofitClient.this.coordinatorLayout != null) {
                         LibUtils.showError(RetrofitClient.this.coordinatorLayout, e.getMessage());
                     }
+                }
+            }
+        });
+    }
+
+    public void initRequest(NetworkResponse networkResponse) {
+        if (this.activity != null && LibUtils.noInternetConnection(this.activity)) {
+            networkResponse.error(true, null);
+            return;
+        }
+
+        if (this.show_progress && this.activity != null && this.dialog != null) {
+            DialogProgress.showDialog(this.activity, this.dialog);
+        }
+
+        this.call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        RetrofitClient.this.hideDialog();
+                        LibUtils.logE("code = " + response.code() + " and message = " + response.body() + " ");
+                        networkResponse.success(response.code(), response.body());
+
+                    } else {
+                        ResponseBody error_body = response.errorBody();
+                        if (error_body != null) {
+                            InputStream stream = error_body.byteStream();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                            StringBuilder builder = new StringBuilder();
+                            String line;
+                            while ((line = reader.readLine()) != null) {
+                                builder.append(line).append("\n");
+                            }
+                            RetrofitClient.this.hideDialog();
+                            LibUtils.logE("code = " + response.code() + " and message = " + builder.toString());
+                            networkResponse.success(response.code(), builder.toString());
+
+                        } else {
+                            RetrofitClient.this.hideDialog();
+                            networkResponse.success(response.code(), "");
+                            LibUtils.logE("code = " + response.code());
+                        }
+                    }
+                } catch (Exception error) {
+                    RetrofitClient.this.hideDialog();
+                    LibUtils.logE(error);
+                    networkResponse.success(response.code(), "");
+                    LibUtils.logE("code = " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                RetrofitClient.this.hideDialog();
+                if (throwable instanceof SocketTimeoutException) {
+                    networkResponse.error(true, throwable);
+                } else {
+                    networkResponse.error(false, throwable);
                 }
             }
         });
