@@ -1,6 +1,7 @@
 package com.wilsofts.libraries;
 
 import android.os.Bundle;
+import android.os.Parcel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.wilsofts.libraries.databinding.ActivityMainBinding;
 import com.wilsofts.utilities.LibUtils;
+import com.wilsofts.utilities.dialogs.DialogResponse;
+import com.wilsofts.utilities.dialogs.ReturnResponse;
 import com.wilsofts.utilities.network.NetworkResponse;
 import com.wilsofts.utilities.network.RetrofitClient;
 
@@ -20,14 +23,22 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 public class MainActivity extends AppCompatActivity {
-   private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.binding =  DataBindingUtil.setContentView(this, R.layout.activity_main);
+        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        this.networkTest();
+        //this.networkTest();
+        this.confirmAlert();
+    }
+
+    private void confirmAlert() {
+        LibUtils.ConfirmationDialog dialog =
+                LibUtils.ConfirmationDialog.newInstance(this, "Hello", "This is my message now.\n<b>This is now formatted</b>",
+                        (ReturnResponse) proceed -> LibUtils.logE(proceed + ""));
+        dialog.show(this.getSupportFragmentManager(), "missiles");
     }
 
     private void networkTest() {

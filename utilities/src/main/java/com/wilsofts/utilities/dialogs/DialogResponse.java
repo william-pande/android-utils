@@ -1,5 +1,7 @@
 package com.wilsofts.utilities.dialogs;
 
-public interface DialogResponse {
+import android.os.Parcelable;
+
+public interface DialogResponse  {
     void response(boolean proceed);
 }

@@ -8,6 +8,9 @@
         <item name="android:textColorPrimary">@color/alert_dialog_text_color</item>
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/dialog_background</item>
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="AppTheme.DialogActivity" parent="Theme.AppCompat.Dialog">

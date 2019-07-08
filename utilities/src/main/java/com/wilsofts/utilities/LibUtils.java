@@ -1,7 +1,9 @@
 package com.wilsofts.utilities;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -12,25 +14,32 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.wilsofts.utilities.dialogs.DialogResponse;
+import com.wilsofts.utilities.dialogs.ReturnResponse;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -297,6 +306,7 @@ public class LibUtils {
                 });
 
         AlertDialog dialog = builder.create();
+        LibUtils.dialogWindow(dialog.getWindow());
         dialog.show();
     }
 
@@ -308,7 +318,7 @@ public class LibUtils {
     }
 
     public static void confirmDialog(Context context, String title, String message, String ok, String cancel, DialogResponse dialogResponse) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
+       /* AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
         builder.setTitle(title);
         builder.setMessage(message);
 
@@ -324,7 +334,7 @@ public class LibUtils {
                 });
 
         AlertDialog dialog = builder.create();
-        dialog.show();
+        dialog.show();*/
     }
 
     public static void extractDatabase(Context context, String database_name) {
@@ -417,4 +427,77 @@ public class LibUtils {
             outRect.set(this.mItemOffset, this.mItemOffset, this.mItemOffset, this.mItemOffset);
         }
     }
+
+    public static class ConfirmationDialog extends DialogFragment {
+
+        public static ConfirmationDialog newInstance(Context context, String title, String message, ReturnResponse returnResponse) {
+            return ConfirmationDialog.newInstance(title, message, context.getString(R.string.proceed),
+                    context.getString(R.string.cancel), returnResponse);
+        }
+
+        public static ConfirmationDialog newInstance(String title, String message, String ok, String cancel, ReturnResponse returnResponse) {
+            ConfirmationDialog dialog = new ConfirmationDialog();
+
+            Bundle extras = new Bundle();
+            extras.putString("title", title);
+            extras.putString("message", message);
+            extras.putString("ok", ok);
+            extras.putString("cancel", cancel);
+            extras.putSerializable("returnResponse", returnResponse);
+            dialog.setArguments(extras);
+
+            return dialog;
+        }
+
+        private Bundle extras;
+
+        @NotNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            FragmentActivity activity = this.getActivity();
+            this.extras = this.getArguments();
+            assert this.extras != null;
+            assert activity != null;
+
+            ReturnResponse returnResponse = (ReturnResponse) this.extras.getSerializable("returnResponse");
+            assert returnResponse != null;
+
+            LayoutInflater inflater = this.requireActivity().getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_layout, null);
+            ((TextView) view.findViewById(R.id.message_text)).setText(Html.fromHtml(this.extras.getString("message")));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.MyDialogTheme)
+                    .setView(view)
+                    .setTitle(this.extras.getString("title"))
+                    .setPositiveButton(this.extras.getString("ok"), (dialog, id) -> {
+                        dialog.dismiss();
+                        returnResponse.response(true);
+                    })
+                    .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                        dialog.dismiss();
+                        returnResponse.response(false);
+                    });
+
+
+            return builder.create();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            Window window = this.getDialog().getWindow();
+            if (window != null) {
+                Point point = new Point();
+                Display display = window.getWindowManager().getDefaultDisplay();
+                display.getSize(point);
+                window.setLayout((int) (point.x * 0.9), ViewGroup.LayoutParams.WRAP_CONTENT);
+                window.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
+                WindowManager.LayoutParams params = window.getAttributes();
+                params.y = 20;
+                window.setAttributes(params);
+            }
+        }
+    }
+
 }
