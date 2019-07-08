@@ -160,7 +160,7 @@ public class RetrofitClient {
                 } catch (Exception error) {
                     RetrofitClient.this.hideDialog();
                     LibUtils.logE(error);
-                    networkResponse.success(response.code(), "");
+                    networkResponse.error(false, null);
                     LibUtils.logE("code = " + response.code());
                 }
             }
