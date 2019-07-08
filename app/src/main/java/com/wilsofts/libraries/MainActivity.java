@@ -1,13 +1,10 @@
 package com.wilsofts.libraries;
 
-import androidx.annotation.NonNull;
+import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.os.Environment;
 
 import com.wilsofts.libraries.databinding.ActivityMainBinding;
 import com.wilsofts.utilities.LibUtils;
@@ -15,7 +12,6 @@ import com.wilsofts.utilities.network.NetworkResponse;
 import com.wilsofts.utilities.network.RetrofitClient;
 
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
