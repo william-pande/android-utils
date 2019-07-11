@@ -3,7 +3,6 @@ package com.wilsofts.utilities;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -15,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -29,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
@@ -38,7 +35,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.wilsofts.utilities.dialogs.DialogResponse;
 import com.wilsofts.utilities.dialogs.ReturnResponse;
 
 import org.jetbrains.annotations.NotNull;
@@ -310,33 +306,6 @@ public class LibUtils {
         dialog.show();
     }
 
-    public static void confirmDialog(Context context, String title, String message, DialogResponse dialogResponse) {
-        LibUtils.confirmDialog(
-                context, title, message,
-                context.getString(R.string.proceed),
-                context.getString(R.string.cancel), dialogResponse);
-    }
-
-    public static void confirmDialog(Context context, String title, String message, String ok, String cancel, DialogResponse dialogResponse) {
-       /* AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MyDialogTheme);
-        builder.setTitle(title);
-        builder.setMessage(message);
-
-        builder.setNegativeButton(cancel, (dialog, which) -> {
-            dialog.dismiss();
-            dialogResponse.response(false);
-        });
-
-        builder.setPositiveButton(ok,
-                (dialog, which) -> {
-                    dialog.dismiss();
-                    dialogResponse.response(true);
-                });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();*/
-    }
-
     public static void extractDatabase(Context context, String database_name) {
         try {
             File storage_file = Environment.getExternalStorageDirectory();
@@ -431,11 +400,18 @@ public class LibUtils {
     public static class ConfirmationDialog extends DialogFragment {
 
         public static ConfirmationDialog newInstance(Context context, String title, String message, ReturnResponse returnResponse) {
-            return ConfirmationDialog.newInstance(title, message, context.getString(R.string.proceed),
-                    context.getString(R.string.cancel), returnResponse);
+            return ConfirmationDialog.newInstance(title, message, context.getString(R.string.proceed), context.getString(R.string.cancel), Gravity.CENTER,
+                    0, 0, returnResponse);
         }
 
-        public static ConfirmationDialog newInstance(String title, String message, String ok, String cancel, ReturnResponse returnResponse) {
+        public static ConfirmationDialog newInstance(Context context, String title, String message, int gravity, int offset_x, int offset_y,
+                                                     ReturnResponse returnResponse) {
+            return ConfirmationDialog.newInstance(title, message, context.getString(R.string.proceed),
+                    context.getString(R.string.cancel), gravity, offset_x, offset_y, returnResponse);
+        }
+
+        public static ConfirmationDialog newInstance(String title, String message, String ok, String cancel, int gravity, int offset_x,
+                                                     int offset_y, ReturnResponse returnResponse) {
             ConfirmationDialog dialog = new ConfirmationDialog();
 
             Bundle extras = new Bundle();
@@ -443,6 +419,9 @@ public class LibUtils {
             extras.putString("message", message);
             extras.putString("ok", ok);
             extras.putString("cancel", cancel);
+            extras.putInt("gravity", gravity);
+            extras.putInt("offset_y", offset_y);
+            extras.putInt("offset_x", offset_x);
             extras.putSerializable("returnResponse", returnResponse);
             dialog.setArguments(extras);
 
@@ -491,10 +470,11 @@ public class LibUtils {
                 Display display = window.getWindowManager().getDefaultDisplay();
                 display.getSize(point);
                 window.setLayout((int) (point.x * 0.9), ViewGroup.LayoutParams.WRAP_CONTENT);
-                window.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+                window.setGravity(this.extras.getInt("gravity"));
 
                 WindowManager.LayoutParams params = window.getAttributes();
-                params.y = 20;
+                params.x = this.extras.getInt("offset_x");
+                params.y = this.extras.getInt("offset_y");
                 window.setAttributes(params);
             }
         }

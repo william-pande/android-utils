@@ -1,7 +1,7 @@
 package com.wilsofts.libraries;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil;
 
 import com.wilsofts.libraries.databinding.ActivityMainBinding;
 import com.wilsofts.utilities.LibUtils;
-import com.wilsofts.utilities.dialogs.DialogResponse;
 import com.wilsofts.utilities.dialogs.ReturnResponse;
 import com.wilsofts.utilities.network.NetworkResponse;
 import com.wilsofts.utilities.network.RetrofitClient;
@@ -31,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         //this.networkTest();
-        this.confirmAlert();
+        //this.confirmAlert();
+
+        this.binding.cameraImageText.setOnClickListener(listener -> this.startActivity(
+                new Intent(this, CameraImageActivity.class)));
     }
 
     private void confirmAlert() {

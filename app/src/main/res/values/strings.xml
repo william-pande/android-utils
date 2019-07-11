@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Libraries</string>
+    <string name="camera_image_text">Camera Image Text</string>
 </resources>
