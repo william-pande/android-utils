@@ -53,20 +53,14 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class LibUtils {
-    private static final String TAG = "LIB UTILS";
+    public static String TAG = "LIB UTILS";
     public static boolean SHOW_LOG = true;
 
     public static int CONNECT_TIMEOUT = 10;
     public static int READ_TIMEOUT = 10;
     public static int WRITE_TIMEOUT = 10;
 
-
     public static String URL_LINK = "";
-    public static String AUTHORIZATION_BEARER = "";
-
-    public static void setUrlLink(String link) {
-        LibUtils.URL_LINK = link;
-    }
 
     public static boolean noInternetConnection(@NonNull Context context, CoordinatorLayout coordinatorLayout) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

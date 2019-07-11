@@ -1,16 +1,13 @@
 package com.wilsofts.libraries;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.wilsofts.libraries.databinding.ActivityCameraImageBinding;
 import com.wilsofts.utilities.LibUtils;
@@ -22,8 +19,6 @@ import java.io.IOException;
 
 public class CameraImageActivity extends AppCompatActivity {
     private ActivityCameraImageBinding binding;
-
-
     //for storing captured image path
     private String currentPhotoPath;
 
