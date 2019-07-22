@@ -58,32 +58,36 @@ public class ImageUtils {
     }
 
     public static String fileToBase64(Context context, @NonNull File original_file, int max_width, int max_height) throws IOException {
-        File compressed_file = ImageUtils.compressFile(context, original_file, max_width, max_height);
+        File compressed_file = ImageUtils.compressFile(
+                context,
+                original_file,
+                new File( original_file.getParentFile().getAbsolutePath() + File.separator + "compressed"),
+                max_width,
+                max_height);
         return ImageUtils.fileToBase64(compressed_file);
     }
 
-    private static File compressFile(Context context, @NonNull File original_file, int max_width, int max_height) throws IOException {
-        File parent_file = original_file.getParentFile();
-        File destination_path = new File(parent_file.getAbsolutePath() + File.separator + "compressed");
-        if (!destination_path.exists()) {
+    public static File compressFile(Context context, @NonNull File original_file, @NonNull  File destination_file , int max_width, int max_height)
+            throws IOException {
+        if (!destination_file.exists()) {
             //noinspection ResultOfMethodCallIgnored
-            destination_path.mkdirs();
+            destination_file.mkdirs();
         }
 
         return new Compressor(context)
                 .setMaxWidth(max_width)
                 .setMaxHeight(max_height)
                 .setQuality(75)
-                .setCompressFormat(Bitmap.CompressFormat.WEBP)
-                .setDestinationDirectoryPath(destination_path.getAbsolutePath())
+                .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                .setDestinationDirectoryPath(destination_file.getAbsolutePath())
                 .compressToFile(original_file);
     }
 
-    private static String fileToBase64(File compressed_file) throws IOException {
-        int size = (int) compressed_file.length();
+    public static String fileToBase64(File file) throws IOException {
+        int size = (int) file.length();
         byte[] bytes = new byte[size];
 
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(compressed_file));
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
         //noinspection ResultOfMethodCallIgnored
         bufferedInputStream.read(bytes, 0, bytes.length);
         bufferedInputStream.close();
