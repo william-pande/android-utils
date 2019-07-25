@@ -446,7 +446,7 @@ public class LibUtils {
                         dialog.dismiss();
                         returnResponse.response(true);
                     })
-                    .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                    .setNegativeButton(this.extras.getString("cancel"), (dialog, id) -> {
                         dialog.dismiss();
                         returnResponse.response(false);
                     });
