@@ -7,4 +7,7 @@
     <string name="request_unsuccessful">Request could not be executed successfully</string>
     <string name="cancel">Cancel</string>
     <string name="proceed">Proceed</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

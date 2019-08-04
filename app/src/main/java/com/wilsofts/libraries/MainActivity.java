@@ -38,17 +38,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void confirmAlert() {
         LibUtils.ConfirmationDialog dialog =
-                LibUtils.ConfirmationDialog.newInstance(this, "Hello", "This is my message now.\n<b>This is now formatted</b>",
-                        (ReturnResponse) proceed -> LibUtils.logE(proceed + ""));
+                LibUtils.ConfirmationDialog.Companion.newInstance(this, "Hello", "This is my message now.\n<b>This is now formatted</b>",
+                        (ReturnResponse) proceed -> LibUtils.INSTANCE.logE(proceed + ""));
         dialog.show(this.getSupportFragmentManager(), "missiles");
     }
 
     private void networkTest() {
-        LibUtils.SHOW_LOG = true;
+        LibUtils.INSTANCE.setSHOW_LOG(true);
 
-        Call<String> call = RetrofitClient.getRetrofitInstance().create(Api.class)
+        Call<String> call = RetrofitClient.Companion.getRetrofitInstance().create(Api.class)
                 .login_user("pande2@gmail.com", "123456s789");
-        new RetrofitClient(this, this.binding.coordinator, call, "Testing please wait")
+        new RetrofitClient(this, call, "Testing please wait")
                 .initRequest(new NetworkResponse() {
                     @Override
                     public void success(int code, String message) throws JSONException {
