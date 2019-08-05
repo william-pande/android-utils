@@ -1,36 +1,48 @@
 package com.wilsofts.utilities.image
 
 import android.graphics.*
+import com.squareup.picasso.Transformation
+import kotlin.math.min
 
-class RoundedTransformation// radius is corner radii in dp
-// margin is the board in dp
-(private val radius: Int, private val margin: Int) : com.squareup.picasso.Transformation {
+class CircleTransform(private val border_color: Int, private val border_radius: Int) : Transformation {
 
     override fun transform(source: Bitmap): Bitmap {
-        val paint = Paint()
-        paint.isAntiAlias = true
-        paint.shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        val size = min(source.width, source.height)
 
-        val output = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(output)
-        canvas.drawCircle((source.width - this.margin) / 2f, (source.height - this.margin) / 2f, (this.radius - 2).toFloat(), paint)
+        val x = (source.width - size) / 2
+        val y = (source.height - size) / 2
 
-        if (source != output) {
+        val squaredBitmap = Bitmap.createBitmap(source, x, y, size, size)
+        if (squaredBitmap != source) {
             source.recycle()
         }
 
-        val paint1 = Paint()
-        paint1.color = Color.RED
-        paint1.style = Paint.Style.STROKE
-        paint1.isAntiAlias = true
-        paint1.strokeWidth = 2f
-        canvas.drawCircle((source.width - this.margin) / 2f, (source.height - this.margin) / 2f, (this.radius - 2).toFloat(), paint1)
+        val bitmap = Bitmap.createBitmap(size, size, source.config)
 
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+        val shader = BitmapShader(squaredBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        paint.shader = shader
+        paint.isAntiAlias = true
 
-        return output
+        val r = size / 2f
+
+        // Prepare the background
+        val paintBg = Paint()
+        paintBg.color = border_color
+        paintBg.isAntiAlias = true
+
+        // Draw the background circle
+        canvas.drawCircle(r, r, r, paintBg)
+
+        // Draw the image smaller than the background so a little border will be seen
+        canvas.drawCircle(r, r, r - border_radius, paint)
+
+        squaredBitmap.recycle()
+        return bitmap
     }
 
     override fun key(): String {
-        return "rounded"
+        return "circle"
     }
 }

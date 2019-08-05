@@ -104,7 +104,7 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
     }
 
     companion object {
-        fun getRetrofitInstance(headers: Intent, url: String): Retrofit {
+        fun getRetrofit(headers: Intent, url: String): Retrofit {
             LibUtils.logE(url)
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -140,21 +140,20 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
                     .build()
         }
 
-        fun getRetrofitInstance(headers: Intent): Retrofit {
-            return getRetrofitInstance(headers, LibUtils.URL_LINK)
+        fun getRetrofit(headers: Intent): Retrofit {
+            return getRetrofit(headers, LibUtils.URL_LINK)
         }
 
-        fun getRetrofitInstance(url: String): Retrofit {
-            return getRetrofitInstance(Intent(), url)
+        fun getRetrofit(url: String): Retrofit {
+            return getRetrofit(Intent(), url)
         }
 
-        val retrofitInstance: Retrofit
-            get() = getRetrofitInstance(Intent(), LibUtils.URL_LINK)
+        val retrofit: Retrofit
+            get() = getRetrofit(Intent(), LibUtils.URL_LINK)
 
         fun getBody(parameters: Map<String, Any>): RequestBody {
             return RequestBody
-                    .create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                            JSONObject(parameters).toString())
+                    .create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSONObject(parameters).toString())
         }
     }
 }

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private void networkTest() {
         LibUtils.INSTANCE.setSHOW_LOG(true);
 
-        Call<String> call = RetrofitClient.Companion.getRetrofitInstance().create(Api.class)
+        Call<String> call = RetrofitClient.Companion.getRetrofit().create(Api.class)
                 .login_user("pande2@gmail.com", "123456s789");
         new RetrofitClient(this, call, "Testing please wait")
                 .initRequest(new NetworkResponse() {
