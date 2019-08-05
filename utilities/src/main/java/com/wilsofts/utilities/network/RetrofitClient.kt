@@ -87,13 +87,14 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
                     this@RetrofitClient.hideDialog()
                     LibUtils.logE(error)
                     networkResponse.error(false, null)
-                    LibUtils.logE("code = " + response.code())
+                    LibUtils.logE("code = ${response.code()}")
                 }
 
             }
 
             override fun onFailure(call: Call<String>, throwable: Throwable) {
                 this@RetrofitClient.hideDialog()
+                LibUtils.logE("Error = $throwable")
                 if (throwable is SocketTimeoutException) {
                     networkResponse.error(true, throwable)
                 } else {
@@ -126,7 +127,7 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
                         chain.proceed(builder.build())
                     }
             if (LibUtils.SHOW_LOG) {
-                builder.addInterceptor(OkHttpProfilerInterceptor() )
+                builder.addInterceptor(OkHttpProfilerInterceptor())
             }
 
             val client = builder.build()
