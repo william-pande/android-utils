@@ -4,7 +4,7 @@ import android.graphics.*
 import com.squareup.picasso.Transformation
 import kotlin.math.min
 
-class CircleTransform(private val border_color: Int, private val border_radius: Int) : Transformation {
+class CircleTransformation(private val border_color: Int, private val border_radius: Int) : Transformation {
 
     override fun transform(source: Bitmap): Bitmap {
         val size = min(source.width, source.height)
