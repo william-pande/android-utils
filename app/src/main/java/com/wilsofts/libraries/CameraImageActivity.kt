@@ -34,6 +34,8 @@ class CameraImageActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 LibUtils.logE(e)
                 LibUtils.showToast(this, e.message!!)
+
+                LibUtils.restart(Intent(), this)
             }
         }
 

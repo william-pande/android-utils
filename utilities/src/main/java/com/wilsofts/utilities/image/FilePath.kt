@@ -81,9 +81,9 @@ object FilePath {
         val projection = arrayOf(column)
         val cursor: Cursor? = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
         if (cursor != null && cursor.moveToFirst()) {
-            val column_index = cursor.getColumnIndexOrThrow(column)
+            val column_index  = cursor.getString(cursor.getColumnIndexOrThrow(column))
             cursor.close()
-            return cursor.getString(column_index)
+            return column_index
         }
         return null
     }
