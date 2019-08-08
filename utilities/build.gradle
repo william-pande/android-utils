@@ -70,6 +70,8 @@ dependencies {
     //Image processor library  created by Square.Inc
     api 'com.squareup.picasso:picasso:2.71828'
 
+    api 'de.hdodenhof:circleimageview:3.0.0'
+
     /*for easy preference management*/
     api 'com.pixplicity.easyprefs:library:1.8.1@aar'
 
@@ -80,4 +82,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     api 'com.itkacher.okhttpprofiler:okhttpprofiler:1.0.5'
+
+    implementation 'com.google.android.play:core:1.6.1'
 }

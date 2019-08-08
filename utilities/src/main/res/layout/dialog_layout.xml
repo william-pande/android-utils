@@ -2,18 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/message_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
         android:text="Pande William 2"
         android:textColor="@color/alert_dialog_text_color"
-        tools:text="Pande William">
+        tools:text="Pande William" />
 
-    </TextView>
+    <CheckBox
+        android:id="@+id/do_not_show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/alert_dialog_text_color"
+        tools:text="Do not show me this again" />
 
 </LinearLayout>

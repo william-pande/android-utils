@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application>
+        <activity android:name=".network.AppUpdaterActivity" />
 
     </application>
 

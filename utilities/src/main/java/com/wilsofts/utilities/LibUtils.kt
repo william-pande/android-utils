@@ -19,6 +19,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DimenRes
@@ -26,7 +27,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wilsofts.utilities.dialogs.ReturnResponse
@@ -262,28 +262,6 @@ object LibUtils {
         return formatted
     }
 
-    fun confirmaAlert(context: Context, title: String, message: String, code: Int) {
-        val builder = AlertDialog.Builder(context, R.style.MyDialogTheme)
-        builder.setTitle(title)
-        builder.setMessage(message)
-
-        builder.setNegativeButton("Close") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        builder.setPositiveButton("Proceed") { dialog, _ ->
-            dialog.dismiss()
-            val intent = Intent("app_receiver")
-            intent.putExtra("code", code)
-            intent.putExtra("proceed", true)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-        }
-
-        val dialog = builder.create()
-        dialogWindow(dialog.window)
-        dialog.show()
-    }
-
     fun extractDatabase(context: Context, database_name: String) {
         try {
             val storage_file = Environment.getExternalStorageDirectory()
@@ -361,7 +339,7 @@ object LibUtils {
 
     class RecyclerViewSpacing(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
 
-        constructor(context: Context, @DimenRes itemOffsetId: Int) : this(context.resources.getDimensionPixelSize(itemOffsetId)) {}
+        constructor(context: Context, @DimenRes itemOffsetId: Int) : this(context.resources.getDimensionPixelSize(itemOffsetId))
 
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
             super.getItemOffsets(outRect, view, parent, state)
@@ -370,7 +348,6 @@ object LibUtils {
     }
 
     class ConfirmationDialog : DialogFragment() {
-
         private var extras: Bundle? = null
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -385,16 +362,24 @@ object LibUtils {
             val view = inflater.inflate(R.layout.dialog_layout, null)
             (view.findViewById<View>(R.id.message_text) as TextView).text = Html.fromHtml(this.extras!!.getString("message"))
 
+            val check_box = view.findViewById<CheckBox>(R.id.do_not_show)
+            val check_text: String = this.extras!!.getString("check")!!
+            if (check_text.isEmpty()) {
+                check_box.visibility = View.GONE
+            } else {
+                check_box.text = check_text
+            }
+
             val builder = AlertDialog.Builder(activity!!, R.style.MyDialogTheme)
                     .setView(view)
                     .setTitle(this.extras!!.getString("title"))
                     .setPositiveButton(this.extras!!.getString("ok")) { dialog, _ ->
                         dialog.dismiss()
-                        returnResponse.response(true)
+                        returnResponse.response(true, check_box.isChecked)
                     }
                     .setNegativeButton(this.extras!!.getString("cancel")) { dialog, _ ->
                         dialog.dismiss()
-                        returnResponse.response(false)
+                        returnResponse.response(false, check_box.isChecked)
                     }
 
 
@@ -419,19 +404,17 @@ object LibUtils {
         }
 
         companion object {
-            fun newInstance(context: Context, title: String, message: String, returnResponse: ReturnResponse): ConfirmationDialog {
-                return newInstance(title, message, context.getString(R.string.proceed), context.getString(R.string.cancel), Gravity.CENTER,
-                        0, 0, returnResponse)
+            fun newInstance(context: Context, title: String, message: String, returnResponse: ReturnResponse, check: String = ""): ConfirmationDialog {
+                return newInstance(title, message, context.getString(R.string.proceed), context.getString(R.string.cancel), Gravity.CENTER, 0, 0, returnResponse, check)
             }
 
             fun newInstance(context: Context, title: String, message: String, gravity: Int, offset_x: Int, offset_y: Int,
-                            returnResponse: ReturnResponse): ConfirmationDialog {
-                return newInstance(title, message, context.getString(R.string.proceed),
-                        context.getString(R.string.cancel), gravity, offset_x, offset_y, returnResponse)
+                            returnResponse: ReturnResponse, check: String = ""): ConfirmationDialog {
+                return newInstance(title, message, context.getString(R.string.proceed), context.getString(R.string.cancel), gravity, offset_x, offset_y, returnResponse, check)
             }
 
             fun newInstance(title: String, message: String, ok: String, cancel: String, gravity: Int, offset_x: Int,
-                            offset_y: Int, returnResponse: ReturnResponse): ConfirmationDialog {
+                            offset_y: Int, returnResponse: ReturnResponse, check: String = ""): ConfirmationDialog {
                 val dialog = ConfirmationDialog()
 
                 val extras = Bundle()
@@ -442,6 +425,7 @@ object LibUtils {
                 extras.putInt("gravity", gravity)
                 extras.putInt("offset_y", offset_y)
                 extras.putInt("offset_x", offset_x)
+                extras.putString("check", check)
                 extras.putSerializable("returnResponse", returnResponse)
                 dialog.arguments = extras
 
