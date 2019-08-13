@@ -343,7 +343,20 @@ object LibUtils {
         } catch (e: IOException) {
             logE(e)
         }
+    }
 
+    fun shareContent(context: Context, subject: String, url_text: String, title: String) {
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "text/plain"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            share.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
+        } else {
+            share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+        }
+        share.putExtra(Intent.EXTRA_SUBJECT, subject)
+        share.putExtra(Intent.EXTRA_TEXT, url_text)
+
+        context.startActivity(Intent.createChooser(share, title))
     }
 
     class RecyclerViewSpacing(private val mItemOffset: Int) : RecyclerView.ItemDecoration() {
