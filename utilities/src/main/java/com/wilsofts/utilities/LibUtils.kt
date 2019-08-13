@@ -162,6 +162,15 @@ object LibUtils {
         }
     }
 
+    fun invalidNumber(number: String): Boolean {
+        val INTEGER_PATTERN = "\\d+"
+
+        if (number.isEmpty()) {
+            return true
+        }
+        return !Pattern.matches(INTEGER_PATTERN, number)
+    }
+
     fun dialogWindow(window: Window?) {
         if (window != null) {
             val point = Point()
