@@ -20,17 +20,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient(activity: FragmentActivity, call: Call<String>, dialog: DialogProgress, networkResponse: NetworkResponse) {
+class RetrofitClient(activity: FragmentActivity?, call: Call<String>, dialog: DialogProgress?, networkResponse: NetworkResponse) {
     init {
-        dialog.progress_circular?.visibility = View.GONE
-        dialog.horizontal_progress?.visibility = View.VISIBLE
-        dialog.progress_text?.visibility = View.VISIBLE
+        dialog?.progress_circular?.visibility = View.GONE
+        dialog?.horizontal_progress?.visibility = View.VISIBLE
+        dialog?.progress_text?.visibility = View.VISIBLE
 
         ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = true)
     }
 
     companion object {
-        fun getRetrofit(headers: Intent, url: String, dialog: DialogProgress): Retrofit {
+        fun getRetrofit(headers: Intent, url: String, listener: ProgressUpdater.ProgressListener): Retrofit {
             LibUtils.logE(url)
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -53,7 +53,7 @@ class RetrofitClient(activity: FragmentActivity, call: Call<String>, dialog: Dia
                     .addNetworkInterceptor { chain ->
                         val originalResponse = chain.proceed(chain.request())
                         originalResponse.newBuilder()
-                                .body(ProgressUpdater.ProgressResponseBody(originalResponse.body()!!, dialog))
+                                .body(ProgressUpdater.ProgressResponseBody(originalResponse.body()!!, listener))
                                 .build()
                     }
 
@@ -72,12 +72,12 @@ class RetrofitClient(activity: FragmentActivity, call: Call<String>, dialog: Dia
                     .build()
         }
 
-        fun getRetrofit(headers: Intent, dialog: DialogProgress): Retrofit {
-            return getRetrofit(headers, LibUtils.URL_LINK, dialog)
+        fun getRetrofit(headers: Intent, listener: ProgressUpdater.ProgressListener): Retrofit {
+            return getRetrofit(headers, LibUtils.URL_LINK, listener)
         }
 
-        fun getRetrofit(url: String, dialog: DialogProgress): Retrofit {
-            return getRetrofit(Intent(), url, dialog)
+        fun getRetrofit(url: String, listener: ProgressUpdater.ProgressListener): Retrofit {
+            return getRetrofit(Intent(), url, listener)
         }
 
         fun getBody(parameters: Map<String, Any>): RequestBody {

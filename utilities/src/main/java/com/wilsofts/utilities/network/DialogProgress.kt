@@ -84,15 +84,17 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
                 val percentage: Long = (100 * bytesRead) / contentLength
                 val formatted = DecimalFormat("#.##").format(percentage)
 
-                val bytes_read = DecimalFormat("#").format(bytesRead )
+                val bytes_read = DecimalFormat("#").format(bytesRead)
                 val content_length = DecimalFormat("#").format(contentLength)
 
                 activity?.runOnUiThread {
                     this.progress_text?.text = "${bytes_read}kbs of $content_length ($formatted% complete)"
                     LibUtils.logE("${bytes_read}kbs of $content_length ($formatted% complete)")
                 }
-            }else{
-                this.progress_text?.text = "${bytesRead}kbs complete)"
+            } else {
+                activity?.runOnUiThread {
+                    this.progress_text?.text = "${bytesRead}kbs complete)"
+                }
             }
         }
     }
