@@ -28,9 +28,9 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
         if (this.activity != null) {
             this.dialog = DialogProgress.newInstance(title)
 
-            dialog!!.progress_circular.visibility = View.VISIBLE
-            dialog!!.horizontal_progress.visibility = View.GONE
-            dialog!!.progress_text.visibility = View.GONE
+            dialog!!.progress_circular?.visibility = View.VISIBLE
+            dialog!!.horizontal_progress?.visibility = View.GONE
+            dialog!!.progress_text?.visibility = View.GONE
         }
     }
 

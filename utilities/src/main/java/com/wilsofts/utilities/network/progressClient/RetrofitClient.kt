@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient(activity: FragmentActivity, call: Call<String>, dialog: DialogProgress, networkResponse: NetworkResponse) {
     init {
-        dialog.progress_circular.visibility = View.GONE
-        dialog.horizontal_progress.visibility = View.VISIBLE
-        dialog.progress_text.visibility = View.VISIBLE
+        dialog.progress_circular?.visibility = View.GONE
+        dialog.horizontal_progress?.visibility = View.VISIBLE
+        dialog.progress_text?.visibility = View.VISIBLE
 
         ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = true)
     }

@@ -54,13 +54,13 @@ class CameraImageActivity : AppCompatActivity() {
                     val myBitmap = BitmapFactory.decodeFile(file.absolutePath)
                     this.binding!!.imageView.setImageBitmap(myBitmap)
 
-                    try {
+                   /* try {
                         val compressed = ImageUtils.fileToBase64(this, file, 500, 500)
                         LibUtils.logE(compressed)
                     } catch (e: IOException) {
                         LibUtils.logE(e)
                         LibUtils.showToast(this, e.message!!)
-                    }
+                    }*/
 
                 }
             } else if (requestCode == ImageUtils.IMAGE_GALLERY) {
