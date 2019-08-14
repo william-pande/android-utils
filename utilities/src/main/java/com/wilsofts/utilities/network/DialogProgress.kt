@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.R
 import com.wilsofts.utilities.network.progressClient.ProgressUpdater
 import java.text.DecimalFormat
@@ -58,17 +59,22 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
 
     @SuppressLint("SetTextI18n")
     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
+        LibUtils.logE("Read = $bytesRead, total = $contentLength")
         if (done) {
-            this.horizontal_progress?.progress = 100
-
-            this.progress_circular?.visibility = View.VISIBLE
-            this.horizontal_progress?.visibility = View.GONE
-            this.progress_text?.visibility = View.GONE
+            activity?.runOnUiThread {
+                this.horizontal_progress?.progress = 100
+                this.progress_circular?.visibility = View.VISIBLE
+                this.horizontal_progress?.visibility = View.GONE
+                this.progress_text?.visibility = View.GONE
+            }
 
         } else {
             if (first_update) {
                 first_update = false
-                horizontal_progress?.isIndeterminate = contentLength == -1L
+                activity?.runOnUiThread {
+                    horizontal_progress?.isIndeterminate = contentLength == -1L
+                }
+                LibUtils.logE("Complete")
             }
 
             if (contentLength != -1L) {
@@ -78,7 +84,10 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
                 val bytes_read = DecimalFormat("#").format(bytesRead / 1000)
                 val content_length = DecimalFormat("#").format(contentLength / 1000)
 
-                this.progress_text?.text = "${bytes_read}kbs of $content_length ($formatted% complete)"
+                activity?.runOnUiThread {
+                    this.progress_text?.text = "${bytes_read}kbs of $content_length ($formatted% complete)"
+                    LibUtils.logE("${bytes_read}kbs of $content_length ($formatted% complete)")
+                }
             }
         }
     }
