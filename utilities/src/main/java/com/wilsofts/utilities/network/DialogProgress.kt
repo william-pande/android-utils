@@ -16,9 +16,9 @@ import com.wilsofts.utilities.network.progressClient.ProgressUpdater
 import java.text.DecimalFormat
 
 class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
-    lateinit var progress_circular: ProgressBar
-    lateinit var horizontal_progress: ProgressBar
-    lateinit var progress_text: TextView
+    var progress_circular: ProgressBar? = null
+    var horizontal_progress: ProgressBar? = null
+    var progress_text: TextView? = null
     private var first_update: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -34,13 +34,13 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
         val arguments = this.arguments
 
         this.progress_circular = view.findViewById(R.id.progress_circular)
-        this.progress_circular.indeterminateDrawable.setColorFilter(
+        this.progress_circular?.indeterminateDrawable?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
 
         this.horizontal_progress = view.findViewById(R.id.horizontal_progress)
-        this.horizontal_progress.indeterminateDrawable.setColorFilter(
+        this.horizontal_progress?.indeterminateDrawable?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
-        horizontal_progress.progressDrawable.setColorFilter(
+        horizontal_progress?.progressDrawable?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
 
         /* this.horizontal_progress.secondaryProgressTintMode.setColorFilter(
@@ -58,16 +58,16 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
     @SuppressLint("SetTextI18n")
     override fun update(bytesRead: Long, contentLength: Long, done: Boolean) {
         if (done) {
-            this.horizontal_progress.progress = 100
+            this.horizontal_progress?.progress = 100
 
-            this.progress_circular.visibility = View.VISIBLE
-            this.horizontal_progress.visibility = View.GONE
-            this.progress_text.visibility = View.GONE
+            this.progress_circular?.visibility = View.VISIBLE
+            this.horizontal_progress?.visibility = View.GONE
+            this.progress_text?.visibility = View.GONE
 
         } else {
             if (first_update) {
                 first_update = false
-                horizontal_progress.isIndeterminate = contentLength == -1L
+                horizontal_progress?.isIndeterminate = contentLength == -1L
             }
 
             if (contentLength != -1L) {
@@ -77,7 +77,7 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
                 val bytes_read = DecimalFormat("#").format(bytesRead / 1000)
                 val content_length = DecimalFormat("#").format(contentLength / 1000)
 
-                this.progress_text.text = "${bytes_read}kbs of $content_length ($formatted% complete)"
+                this.progress_text?.text = "${bytes_read}kbs of $content_length ($formatted% complete)"
             }
         }
     }
