@@ -43,6 +43,7 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
         horizontal_progress?.progressDrawable?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
 
+
         /* this.horizontal_progress.secondaryProgressTintMode.setColorFilter(
                  ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
          this.horizontal_progress.indeterminateDrawable.setColorFilter(
