@@ -10,4 +10,5 @@
     <color name="alert_dialog_background">#FFFFFF</color>
     <color name="alert_dialog_border">#000000</color>
     <color name="alert_dialog_text_color">#000000</color>
+    <color name="color_progress_cream">#D3CBCB</color>
 </resources>

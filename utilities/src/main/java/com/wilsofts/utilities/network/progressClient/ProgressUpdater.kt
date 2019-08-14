@@ -1,5 +1,6 @@
 package com.wilsofts.utilities.network.progressClient
 
+import com.wilsofts.utilities.LibUtils
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
@@ -16,6 +17,7 @@ class ProgressUpdater {
         }
 
         override fun contentLength(): Long {
+            LibUtils.logE("Content length = " + this.responseBody.contentLength())
             return this.responseBody.contentLength()
         }
 

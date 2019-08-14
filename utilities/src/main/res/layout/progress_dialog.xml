@@ -22,6 +22,7 @@
             android:layout_marginBottom="10dp" />
 
         <ProgressBar
+            android:layout_marginTop="25dp"
             android:id="@+id/horizontal_progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
@@ -30,7 +31,7 @@
             android:layout_marginRight="10dp"
             android:indeterminate="true"
             android:max="100"
-            android:progress="26"
+            tools:progress="26"
             android:visibility="gone" />
 
         <TextView

@@ -42,11 +42,12 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
         this.horizontal_progress = view.findViewById(R.id.horizontal_progress)
         this.horizontal_progress?.indeterminateDrawable?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
+
         val progress_bar_drawable: LayerDrawable? = this.horizontal_progress?.progressDrawable as LayerDrawable
         progress_bar_drawable?.getDrawable(0)?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
         progress_bar_drawable?.getDrawable(1)?.setColorFilter(
-                ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
+                ContextCompat.getColor(activity!!, R.color.color_progress_cream), PorterDuff.Mode.SRC_IN)
 
         this.progress_text = view.findViewById(R.id.progress_text)
 
