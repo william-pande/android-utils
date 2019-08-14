@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network
+package com.wilsofts.utilities.network.progressClient
 
 import android.content.Intent
 import android.view.View
@@ -6,7 +6,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.progressClient.ResponseManager
+import com.wilsofts.utilities.network.DialogProgress
+import com.wilsofts.utilities.network.NetworkResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -19,32 +20,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient(private val activity: FragmentActivity?, private val call: Call<String>, title: String) {
-    private var show_progress: Boolean = false
-    private var dialog: DialogProgress? = null
-
+class RetrofitClient(activity: FragmentActivity, call: Call<String>, dialog: DialogProgress, networkResponse: NetworkResponse) {
     init {
-        this.show_progress = true
-        if (this.activity != null) {
-            this.dialog = DialogProgress.newInstance(title)
+        dialog.progress_circular.visibility = View.GONE
+        dialog.horizontal_progress.visibility = View.VISIBLE
+        dialog.progress_text.visibility = View.VISIBLE
 
-            dialog!!.progress_circular.visibility = View.VISIBLE
-            dialog!!.horizontal_progress.visibility = View.GONE
-            dialog!!.progress_text.visibility = View.GONE
-        }
-    }
-
-    fun initProgress(): RetrofitClient {
-        this.show_progress = false
-        return this
-    }
-
-    fun initRequest(networkResponse: NetworkResponse) {
-        ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = show_progress)
+        ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = true)
     }
 
     companion object {
-        fun getRetrofit(headers: Intent, url: String): Retrofit {
+        fun getRetrofit(headers: Intent, url: String, dialog: DialogProgress): Retrofit {
             LibUtils.logE(url)
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -64,6 +50,12 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
                         }
                         chain.proceed(builder.build())
                     }
+                    .addNetworkInterceptor { chain ->
+                        val originalResponse = chain.proceed(chain.request())
+                        originalResponse.newBuilder()
+                                .body(ProgressUpdater.ProgressResponseBody(originalResponse.body()!!, dialog))
+                                .build()
+                    }
 
             if (LibUtils.SHOW_LOG) {
                 builder.addInterceptor(OkHttpProfilerInterceptor())
@@ -80,16 +72,13 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
                     .build()
         }
 
-        fun getRetrofit(headers: Intent): Retrofit {
-            return getRetrofit(headers, LibUtils.URL_LINK)
+        fun getRetrofit(headers: Intent, dialog: DialogProgress): Retrofit {
+            return getRetrofit(headers, LibUtils.URL_LINK, dialog)
         }
 
-        fun getRetrofit(url: String): Retrofit {
-            return getRetrofit(Intent(), url)
+        fun getRetrofit(url: String, dialog: DialogProgress): Retrofit {
+            return getRetrofit(Intent(), url, dialog)
         }
-
-        val retrofit: Retrofit
-            get() = getRetrofit(Intent(), LibUtils.URL_LINK)
 
         fun getBody(parameters: Map<String, Any>): RequestBody {
             return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSONObject(parameters).toString())
