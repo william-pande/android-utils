@@ -28,8 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:indeterminate="true"
             android:max="100"
-            android:progress="26" />
+            android:progress="26"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/progress_text"
@@ -39,8 +41,9 @@
             android:gravity="center"
             android:textColor="@color/alert_dialog_text_color"
             android:textSize="15sp"
-            tools:text="10kbs of 150kbs (20% complete)"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="10kbs of 150kbs (20% complete)" />
 
         <TextView
             android:id="@+id/dialog_title"

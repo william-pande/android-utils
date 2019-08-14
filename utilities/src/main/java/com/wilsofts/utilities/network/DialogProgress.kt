@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Point
 import android.graphics.PorterDuff
+import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.ProgressBar
@@ -41,19 +42,20 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
         this.horizontal_progress = view.findViewById(R.id.horizontal_progress)
         this.horizontal_progress?.indeterminateDrawable?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
-        horizontal_progress?.progressDrawable?.setColorFilter(
+        val progress_bar_drawable: LayerDrawable? = this.horizontal_progress?.progressDrawable as LayerDrawable
+        progress_bar_drawable?.getDrawable(0)?.setColorFilter(
                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
-
-
-        /* this.horizontal_progress.secondaryProgressTintMode.setColorFilter(
-                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
-         this.horizontal_progress.indeterminateDrawable.setColorFilter(
-                 ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)*/
+        progress_bar_drawable?.getDrawable(1)?.setColorFilter(
+                ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
 
         this.progress_text = view.findViewById(R.id.progress_text)
 
 
         (view.findViewById<View>(R.id.dialog_title) as TextView).text = arguments!!.getString("title")
+
+        this.progress_circular?.visibility = View.GONE
+        this.horizontal_progress?.visibility = View.VISIBLE
+        this.progress_text?.visibility = View.VISIBLE
         return view
     }
 
@@ -81,13 +83,15 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
                 val percentage: Long = (100 * bytesRead) / contentLength
                 val formatted = DecimalFormat("#.##").format(percentage)
 
-                val bytes_read = DecimalFormat("#").format(bytesRead / 1000)
-                val content_length = DecimalFormat("#").format(contentLength / 1000)
+                val bytes_read = DecimalFormat("#").format(bytesRead )
+                val content_length = DecimalFormat("#").format(contentLength)
 
                 activity?.runOnUiThread {
                     this.progress_text?.text = "${bytes_read}kbs of $content_length ($formatted% complete)"
                     LibUtils.logE("${bytes_read}kbs of $content_length ($formatted% complete)")
                 }
+            }else{
+                this.progress_text?.text = "${bytesRead}kbs complete)"
             }
         }
     }
