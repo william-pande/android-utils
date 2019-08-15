@@ -21,7 +21,7 @@ object ImageUtils {
     @Throws(IOException::class)
     fun createImageFile(activity: FragmentActivity): File {
         @SuppressLint("SimpleDateFormat")
-        var time = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        var time = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         time = "JPEG_" + time + "_"
 
         val storage_dir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -31,7 +31,7 @@ object ImageUtils {
     @Throws(IOException::class)
     fun createImageFile(parent: String): File? {
         @SuppressLint("SimpleDateFormat")
-        var time = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(java.util.Date())
+        var time = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         time = "JPEG_" + time + "_"
 
         val storage_dir = File(Environment.getExternalStoragePublicDirectory(
@@ -72,10 +72,19 @@ object ImageUtils {
                 .quality(quality)
                 .height(max_height)
                 .width(max_width)
-                .destination(original_file.parentFile.absolutePath + File.separator + "Compressed")
+                .destination(getCacheDir(context).absolutePath + File.separator + "Compressed")
                 .compressImage() ?: return null
 
         return fileToBase64(compressed)
+    }
+
+    fun getCacheDir(context: Context): File {
+        var cache_directory = context.externalCacheDir
+        if (cache_directory == null) {
+            //fall back
+            cache_directory = context.cacheDir
+        }
+        return cache_directory!!
     }
 
     class CompressImage(private val context: Context, private val path: String) {
@@ -91,7 +100,7 @@ object ImageUtils {
             this.image_height = 900
             this.image_quality = 80
             this.formatJPEG()
-            this.original_destination("Compressed")
+            this.original_destination(File.separator + "Compressed")
         }
 
         fun height(image_height: Int): CompressImage {
@@ -130,13 +139,9 @@ object ImageUtils {
         private fun original_destination(directory: String): CompressImage {
             //getting device external cache directory, might not be available on some devices,
             // so our code fall back to internal storage cache directory, which is always available but in smaller quantity
-            var cache_directory = this.context.externalCacheDir
-            if (cache_directory == null) {
-                //fall back
-                cache_directory = this.context.cacheDir
-            }
+            val cache_directory = getCacheDir(this.context)
 
-            val root_directory = cache_directory!!.absolutePath + directory
+            val root_directory = cache_directory.absolutePath + directory
             this.destination = File(root_directory)
 
             //Create ImageCompressor folder if it does not already exists.
