@@ -7,8 +7,8 @@
     <color name="white">#FFFFFF</color>
 
     <!--user alert dialog-->
-    <color name="alert_dialog_background">#FFFFFF</color>
-    <color name="alert_dialog_border">#000000</color>
-    <color name="alert_dialog_text_color">#000000</color>
+    <color name="alert_dialog_background">@color/colorPrimary</color>
+    <color name="alert_dialog_border">@color/colorPrimaryDark</color>
+    <color name="alert_dialog_text_color">@color/white</color>
     <color name="color_progress_cream">#D3CBCB</color>
 </resources>

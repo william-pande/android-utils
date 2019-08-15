@@ -1,13 +1,12 @@
 package com.wilsofts.utilities.network.progressClient
 
 import android.content.Intent
-import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.DialogProgress
-import com.wilsofts.utilities.network.NetworkResponse
+import com.wilsofts.utilities.network.misc.NetworkResponse
+import com.wilsofts.utilities.network.misc.ResponseManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -20,12 +19,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient(activity: FragmentActivity?, call: Call<String>, dialog: DialogProgress?, networkResponse: NetworkResponse) {
-    init {
-        dialog?.progress_circular?.visibility = View.GONE
-        dialog?.horizontal_progress?.visibility = View.VISIBLE
-        dialog?.progress_text?.visibility = View.VISIBLE
+class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog: DialogProgressLinear?, networkResponse: NetworkResponse) {
 
+    init {
         ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = true)
     }
 

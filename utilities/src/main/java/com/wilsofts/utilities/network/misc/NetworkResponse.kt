@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network
+package com.wilsofts.utilities.network.misc
 
 import org.json.JSONException
 

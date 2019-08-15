@@ -1,12 +1,13 @@
-package com.wilsofts.utilities.network
+package com.wilsofts.utilities.network.progressDefault
 
 import android.content.Intent
-import android.view.View
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.progressClient.ResponseManager
+import com.wilsofts.utilities.network.misc.NetworkResponse
+import com.wilsofts.utilities.network.misc.ResponseManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -21,21 +22,22 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient(private val activity: FragmentActivity?, private val call: Call<String>, title: String) {
     private var show_progress: Boolean = false
-    private var dialog: DialogProgress? = null
+    private var dialog: DialogFragment? = null
 
     init {
         this.show_progress = true
         if (this.activity != null) {
             this.dialog = DialogProgress.newInstance(title)
-
-            dialog!!.progress_circular?.visibility = View.VISIBLE
-            dialog!!.horizontal_progress?.visibility = View.GONE
-            dialog!!.progress_text?.visibility = View.GONE
         }
     }
 
     fun initProgress(): RetrofitClient {
         this.show_progress = false
+        return this
+    }
+
+    fun initDialog(dialog: DialogFragment): RetrofitClient {
+        this.dialog = dialog
         return this
     }
 

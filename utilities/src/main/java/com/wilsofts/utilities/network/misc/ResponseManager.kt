@@ -1,9 +1,9 @@
-package com.wilsofts.utilities.network.progressClient
+package com.wilsofts.utilities.network.misc
 
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.DialogProgress
-import com.wilsofts.utilities.network.NetworkResponse
+import com.wilsofts.utilities.network.progressDefault.DialogProgress
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,7 +14,7 @@ import java.net.SocketTimeoutException
 class ResponseManager(
         private val call: Call<String>,
         val networkResponse: NetworkResponse,
-        val dialog: DialogProgress?,
+        val dialog: DialogFragment?,
         val activity: FragmentActivity?,
         val show_progress: Boolean) {
     init {

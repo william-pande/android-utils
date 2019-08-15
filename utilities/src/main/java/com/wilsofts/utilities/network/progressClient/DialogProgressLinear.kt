@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network
+package com.wilsofts.utilities.network.progressClient
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -14,11 +14,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.R
-import com.wilsofts.utilities.network.progressClient.ProgressUpdater
 import java.text.DecimalFormat
 
-class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
-    var progress_circular: ProgressBar? = null
+class DialogProgressLinear : DialogFragment(), ProgressUpdater.ProgressListener {
     var horizontal_progress: ProgressBar? = null
     var progress_text: TextView? = null
     private var first_update: Boolean = false
@@ -32,12 +30,8 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.progress_dialog, container, false)
+        val view = inflater.inflate(R.layout.progress_dialog_linear, container, false)
         val arguments = this.arguments
-
-        this.progress_circular = view.findViewById(R.id.progress_circular)
-        this.progress_circular?.indeterminateDrawable?.setColorFilter(
-                ContextCompat.getColor(activity!!, R.color.alert_dialog_text_color), PorterDuff.Mode.SRC_IN)
 
         this.horizontal_progress = view.findViewById(R.id.horizontal_progress)
         this.horizontal_progress?.indeterminateDrawable?.setColorFilter(
@@ -54,7 +48,6 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
 
         (view.findViewById<View>(R.id.dialog_title) as TextView).text = arguments!!.getString("title")
 
-        this.progress_circular?.visibility = View.GONE
         this.horizontal_progress?.visibility = View.VISIBLE
         this.progress_text?.visibility = View.VISIBLE
         return view
@@ -66,9 +59,6 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
         if (done) {
             activity?.runOnUiThread {
                 this.horizontal_progress?.progress = 100
-                this.progress_circular?.visibility = View.VISIBLE
-                this.horizontal_progress?.visibility = View.GONE
-                this.progress_text?.visibility = View.GONE
             }
 
         } else {
@@ -114,8 +104,8 @@ class DialogProgress : DialogFragment(), ProgressUpdater.ProgressListener {
     }
 
     companion object {
-        fun newInstance(title: String): DialogProgress {
-            val myProgressDialog = DialogProgress()
+        fun newInstance(title: String): DialogProgressLinear {
+            val myProgressDialog = DialogProgressLinear()
             val arguments = Bundle()
             arguments.putString("title", title)
             myProgressDialog.arguments = arguments

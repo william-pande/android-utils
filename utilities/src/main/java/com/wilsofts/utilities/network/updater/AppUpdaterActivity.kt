@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network
+package com.wilsofts.utilities.network.updater
 
 import android.app.Activity
 import android.content.Context

@@ -9,8 +9,8 @@ import com.wilsofts.libraries.databinding.ActivityMainBinding
 import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.dialogs.ReturnResponse
 import com.wilsofts.utilities.image.ImageUtils
-import com.wilsofts.utilities.network.NetworkResponse
-import com.wilsofts.utilities.network.RetrofitClient
+import com.wilsofts.utilities.network.misc.NetworkResponse
+import com.wilsofts.utilities.network.progressDefault.RetrofitClient
 
 import org.json.JSONException
 import org.json.JSONObject

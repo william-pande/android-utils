@@ -21,31 +21,6 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp" />
 
-        <ProgressBar
-            android:id="@+id/horizontal_progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="10dp"
-            android:indeterminate="true"
-            android:max="100"
-            android:visibility="gone"
-            tools:progress="26" />
-
-        <TextView
-            android:id="@+id/progress_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:textColor="@color/alert_dialog_text_color"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            tools:text="10kbs of 150kbs (20% complete)" />
-
         <TextView
             android:id="@+id/dialog_title"
             android:layout_width="match_parent"
