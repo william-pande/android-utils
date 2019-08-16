@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network.progressClient
+package com.wilsofts.utilities.network.progressLinear
 
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity

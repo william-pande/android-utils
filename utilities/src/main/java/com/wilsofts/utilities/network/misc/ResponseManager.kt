@@ -3,7 +3,6 @@ package com.wilsofts.utilities.network.misc
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.progressDefault.DialogProgress
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +27,7 @@ class ResponseManager(
         }
 
         if (this.show_progress && this.activity != null && this.dialog != null) {
-            DialogProgress.showDialog(this.activity, this.dialog)
+            this.showDialog()
         }
 
         this.call.enqueue(object : Callback<String> {
@@ -80,9 +79,22 @@ class ResponseManager(
         })
     }
 
-    fun hideDialog() {
+    private fun showDialog() {
+        if (dialog != null && activity != null) {
+            val manager = activity.supportFragmentManager
+            manager.beginTransaction()
+                    .add(dialog, "dialog_fragment")
+                    .commitAllowingStateLoss()
+        }
+    }
+
+    private fun hideDialog() {
         if (this.activity != null && this.dialog!!.isVisible) {
-            DialogProgress.hideProgress(this.activity)
+            val manager = activity.supportFragmentManager
+            val fragment = manager.findFragmentByTag("dialog_fragment")
+            if (fragment != null) {
+                manager.beginTransaction().remove(fragment).commitAllowingStateLoss()
+            }
         }
     }
 }

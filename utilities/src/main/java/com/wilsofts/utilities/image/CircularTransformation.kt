@@ -9,7 +9,7 @@ class CircularTransformation : Transformation {
     private val border_color: Int
     private val border_width: Int
 
-    internal constructor() {
+    constructor() {
         this.border_color = android.R.color.transparent
         this.border_width = 0
     }

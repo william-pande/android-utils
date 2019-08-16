@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network.progressClient
+package com.wilsofts.utilities.network.progressLinear
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -11,7 +11,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.R
 import java.text.DecimalFormat
@@ -110,21 +109,6 @@ class DialogProgressLinear : DialogFragment(), ProgressUpdater.ProgressListener 
             arguments.putString("title", title)
             myProgressDialog.arguments = arguments
             return myProgressDialog
-        }
-
-        fun showDialog(activity: FragmentActivity, dialog: DialogFragment) {
-            val manager = activity.supportFragmentManager
-            manager.beginTransaction()
-                    .add(dialog, "dialog_fragment")
-                    .commitAllowingStateLoss()
-        }
-
-        fun hideProgress(activity: FragmentActivity) {
-            val manager = activity.supportFragmentManager
-            val fragment = manager.findFragmentByTag("dialog_fragment")
-            if (fragment != null) {
-                manager.beginTransaction().remove(fragment).commitAllowingStateLoss()
-            }
         }
     }
 }

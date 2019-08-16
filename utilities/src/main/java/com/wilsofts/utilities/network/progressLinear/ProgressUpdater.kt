@@ -1,4 +1,4 @@
-package com.wilsofts.utilities.network.progressClient
+package com.wilsofts.utilities.network.progressLinear
 
 import com.wilsofts.utilities.LibUtils
 import okhttp3.MediaType

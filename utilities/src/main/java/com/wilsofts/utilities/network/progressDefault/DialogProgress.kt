@@ -56,20 +56,5 @@ class DialogProgress : DialogFragment() {
             myProgressDialog.arguments = arguments
             return myProgressDialog
         }
-
-        fun showDialog(activity: FragmentActivity, dialog: DialogFragment) {
-            val manager = activity.supportFragmentManager
-            manager.beginTransaction()
-                    .add(dialog, "dialog_fragment")
-                    .commitAllowingStateLoss()
-        }
-
-        fun hideProgress(activity: FragmentActivity) {
-            val manager = activity.supportFragmentManager
-            val fragment = manager.findFragmentByTag("dialog_fragment")
-            if (fragment != null) {
-                manager.beginTransaction().remove(fragment).commitAllowingStateLoss()
-            }
-        }
     }
 }
