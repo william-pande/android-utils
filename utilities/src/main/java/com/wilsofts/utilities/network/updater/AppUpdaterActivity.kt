@@ -50,6 +50,7 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
                         appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) -> {
                             if (current < version) {
                                 continueUpdate(returnResponse, editor, appUpdateInfo, version)
+
                             } else {
                                 if ((System.currentTimeMillis() - last_checked) < (3600 * 24) || ignored) {
                                     returnResponse.response(false)
@@ -115,7 +116,8 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
                                         editor.apply()
 
                                         if (proceed) {
-                                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this@AppUpdaterActivity, IMMEDIATE)
+                                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE,
+                                                    this@AppUpdaterActivity, IMMEDIATE)
                                         }
                                     }
                                 },
@@ -126,6 +128,8 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
                         appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, FLEXIBLE)
                     }
                 }
+            }else{
+                this.finish()
             }
         }
     }
@@ -176,6 +180,8 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
                     this.finish()
                 }
             }
+        } else {
+            this.finish()
         }
     }
 }
