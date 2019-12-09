@@ -47,6 +47,10 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
         calendar.set(Calendar.YEAR, year)
         calendar.set(Calendar.MONTH, month)
         calendar.set(Calendar.DATE, day)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
 
         @SuppressLint("SimpleDateFormat")
         val format = SimpleDateFormat("EEE dd MMM yyyy")
