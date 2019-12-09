@@ -10,9 +10,6 @@ import java.io.*
 
 class RetrofitDownloader(call: Call<ResponseBody>, private val downloadResponse: DownloadResponse, private val target_path: File)
     : AsyncTask<ResponseBody, RetrofitDownloader.Progress, String>() {
-
-    constructor(call: Call<ResponseBody>, target_path: File, downloadResponse: DownloadResponse) : this(call, downloadResponse, target_path)
-
     init {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

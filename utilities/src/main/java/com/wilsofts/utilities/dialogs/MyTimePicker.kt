@@ -5,11 +5,9 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.widget.TimePicker
 
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
@@ -27,13 +25,13 @@ class MyTimePicker : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        var hourOfDay = hourOfDay
+        var hour_of_day = hourOfDay
         val intent = Intent("date_time")
-        intent.putExtra("int_time", (hourOfDay * 60 + minute) * 60000)
+        intent.putExtra("int_time", (hour_of_day * 60 + minute) * 60000)
 
-        val time = if (hourOfDay < 12) "AM" else "PM"
-        hourOfDay = if (hourOfDay > 12) hourOfDay - 12 else hourOfDay
-        val hour_ = if (hourOfDay < 10) "0$hourOfDay" else hourOfDay.toString()
+        val time = if (hour_of_day < 12) "AM" else "PM"
+        hour_of_day = if (hour_of_day > 12) hour_of_day - 12 else hour_of_day
+        val hour_ = if (hour_of_day < 10) "0$hour_of_day" else hour_of_day.toString()
         val minute_ = if (minute < 10) "0$minute" else minute.toString()
         intent.putExtra("string_time", "$hour_:$minute_ $time")
         LocalBroadcastManager.getInstance(this.activity!!).sendBroadcast(intent)
