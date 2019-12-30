@@ -17,25 +17,31 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
         val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
         // Create a new instance of DatePickerDialog and return it
-        val dialog = DatePickerDialog(this.activity!!, this, year, month, day)
+        var dialog = DatePickerDialog(this.activity!!, this, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
         val bundle = this.arguments
         if (bundle != null) {
+            if (bundle.containsKey("current_date")) {
+                val current_date = bundle.getString("current_date")
+                if (current_date != null) {
+                    calendar.timeInMillis = current_date.toLong()
+                    dialog = DatePickerDialog(this.activity!!, this, calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+                }
+            }
+
             if (bundle.containsKey("min_date")) {
                 val min_date = bundle.getString("min_date")
                 if (min_date != null) {
-                    dialog.datePicker.minDate = java.lang.Long.parseLong(min_date)
+                    dialog.datePicker.minDate = min_date.toLong()
                 }
             }
 
             if (bundle.containsKey("max_date")) {
                 val max_date = bundle.getString("max_date")
                 if (max_date != null) {
-                    dialog.datePicker.maxDate = java.lang.Long.parseLong(max_date)
+                    dialog.datePicker.maxDate = max_date.toLong()
                 }
             }
         }
@@ -68,6 +74,16 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
             val bundle = Bundle()
             bundle.putString("min_date", min_date)
             bundle.putString("max_date", max_date)
+            datePicker.arguments = bundle
+            return datePicker
+        }
+
+        fun newInstance(current_date: String?, min_date: String?, max_date: String?): MyDatePicker {
+            val datePicker = MyDatePicker()
+            val bundle = Bundle()
+            bundle.putString("min_date", min_date)
+            bundle.putString("max_date", max_date)
+            bundle.putString("current_date", current_date)
             datePicker.arguments = bundle
             return datePicker
         }
