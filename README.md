@@ -29,23 +29,23 @@ LibUtils.SHOW_LOG = true
 LibUtils.CONNECT_TIMEOUT = 10
 ```
 
-###Connection read time out
+### Connection read time out
 ```kotlin
 LibUtils.READ_TIMEOUT = 10
 ```
 
 
-###Connection write time out
+# Connection write time out
 ```kotlin
 LibUtils.WRITE_TIMEOUT = 10
 ```
 
-###The url for   
+#The url for   
 ```kotlin  
 LibUtils.URL_LINK = ""
 ```
 
- ###user alert dialog colors
+ # User alert dialog colors
  ```xml
 <resources>
     <color name="alert_dialog_background">@color/colorPrimary</color>
@@ -59,10 +59,21 @@ LibUtils.URL_LINK = ""
 </resources>
  ```
  
- ###user alert dimensions
+ # User alert dimensions
  ```xml
  <resources>
     <dimen name="alert_dialog_radius">5dp</dimen>
     <dimen name="alert_dialog_stroke_width">5dp</dimen>
  </resources>
  ```
+ 
+ Contribution
+ ============
+ 
+ ### Pull requests are welcome!
+ 
+ Feel free to contribute to BetterPickers.
+ 
+ If you've fixed a bug or have a feature you've added, just create a pull request.
+ 
+ If you've found a bug, want a new feature, or have other questions, [file an issue][10]. We will try to answer as soon as possible.
