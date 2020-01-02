@@ -40,7 +40,7 @@ LibUtils.READ_TIMEOUT = 10
 LibUtils.WRITE_TIMEOUT = 10
 ```
 
-#The url for   
+# The url for   
 ```kotlin  
 LibUtils.URL_LINK = ""
 ```
@@ -69,11 +69,8 @@ LibUtils.URL_LINK = ""
  
  Contribution
  ============
- 
  ### Pull requests are welcome!
- 
  Feel free to contribute to BetterPickers.
- 
  If you've fixed a bug or have a feature you've added, just create a pull request.
- 
+
  If you've found a bug, want a new feature, or have other questions, [file an issue][10]. We will try to answer as soon as possible.
