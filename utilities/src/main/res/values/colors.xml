@@ -11,4 +11,8 @@
     <color name="alert_dialog_border">@color/colorPrimaryDark</color>
     <color name="alert_dialog_text_color">@color/white</color>
     <color name="color_progress_cream">#D3CBCB</color>
+
+    <color name="alert_positive_color">@color/colorAccent</color>
+    <color name="alert_negative_color">@color/colorAccent</color>
+    <color name="alert_neutral_cream">@color/colorAccent</color>
 </resources>
