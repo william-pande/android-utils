@@ -9,7 +9,7 @@ Including in Your Project
 ### Gradle
 
 ```groovy
-compile 'com.code-troopers.betterpickers:library:3.1.0'
+    implementation 'com.github.william-pande:android-utils:x.x.x'
 ```
 
 ### You can override the constants
