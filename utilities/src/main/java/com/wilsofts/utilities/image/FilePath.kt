@@ -5,9 +5,9 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import java.io.File
 
 object FilePath {
     /**
@@ -17,7 +17,6 @@ object FilePath {
      *
      * @param context The context.
      * @param uri     The Uri to query.
-     * @author paulburke
      */
     fun getPath(context: Context, uri: Uri): String? {
         // DocumentProvider
@@ -29,7 +28,7 @@ object FilePath {
                 val type = split[0]
 
                 if ("primary".equals(type, ignoreCase = true)) {
-                    return Environment.getExternalStorageDirectory().toString() + "/" + split[1]
+                    return context.getExternalFilesDir(null)?.absolutePath + File.separator + split[1]
                 }
 
                 // TODO handle non-primary volumes
@@ -81,7 +80,7 @@ object FilePath {
         val projection = arrayOf(column)
         val cursor: Cursor? = context.contentResolver.query(uri!!, projection, selection, selectionArgs, null)
         if (cursor != null && cursor.moveToFirst()) {
-            val column_index  = cursor.getString(cursor.getColumnIndexOrThrow(column))
+            val column_index = cursor.getString(cursor.getColumnIndexOrThrow(column))
             cursor.close()
             return column_index
         }

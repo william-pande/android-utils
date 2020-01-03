@@ -15,6 +15,7 @@ import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.R
 import java.text.DecimalFormat
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class DialogProgressLinear : DialogFragment(), ProgressUpdater.ProgressListener {
     var horizontal_progress: ProgressBar? = null
     var progress_text: TextView? = null

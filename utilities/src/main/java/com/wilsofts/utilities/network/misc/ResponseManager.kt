@@ -10,12 +10,8 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.SocketTimeoutException
 
-class ResponseManager(
-        private val call: Call<String>,
-        val networkResponse: NetworkResponse,
-        val dialog: DialogFragment?,
-        val activity: FragmentActivity?,
-        val show_progress: Boolean) {
+class ResponseManager(private val call: Call<String>, val networkResponse: NetworkResponse, val dialog: DialogFragment?,
+                      val activity: FragmentActivity?, val show_progress: Boolean) {
     init {
         this.response()
     }

@@ -1,18 +1,16 @@
 package com.wilsofts.utilities.dialogs
 
-
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TimePicker
-
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import java.util.*
 
-import java.util.Calendar
-
+@Suppress("unused")
 class MyTimePicker : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current time as the default values for the picker

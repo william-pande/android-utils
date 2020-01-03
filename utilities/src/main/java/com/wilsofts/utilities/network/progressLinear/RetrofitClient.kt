@@ -19,6 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog: DialogProgressLinear?, networkResponse: NetworkResponse) {
 
     init {

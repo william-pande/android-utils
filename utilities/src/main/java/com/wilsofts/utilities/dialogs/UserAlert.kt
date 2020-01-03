@@ -9,8 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.wilsofts.utilities.R
-import java.util.*
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class UserAlert : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

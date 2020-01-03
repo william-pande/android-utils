@@ -24,7 +24,7 @@ class CameraImageActivity : AppCompatActivity() {
 
         this.binding!!.photoCamera.setOnClickListener {
             try {
-                val image_file = ImageUtils.createImageFile("LibTest")
+                val image_file = ImageUtils.createImageFile(this, "LibTest")
                 if (image_file != null) {
                     this.currentPhotoPath = image_file.absolutePath
                     ImageUtils.captureImage(this, image_file, "com.wilsofts.utilities.fileprovider")
@@ -47,22 +47,28 @@ class CameraImageActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null) {
             if (requestCode == ImageUtils.IMAGE_CAMERA) {
-                val file = File(this.currentPhotoPath)
-                if (file.exists()) {
-                    val myBitmap = BitmapFactory.decodeFile(file.absolutePath)
-                    this.binding!!.imageView.setImageBitmap(myBitmap)
+                if (this.currentPhotoPath != null) {
+                    val file = File(this.currentPhotoPath!!)
+                    if (file.exists()) {
+                        val myBitmap = BitmapFactory.decodeFile(file.absolutePath)
+                        this.binding!!.imageView.setImageBitmap(myBitmap)
 
-                   /* try {
-                        val compressed = ImageUtils.fileToBase64(this, file, 500, 500)
-                        LibUtils.logE(compressed)
-                    } catch (e: IOException) {
-                        LibUtils.logE(e)
-                        LibUtils.showToast(this, e.message!!)
-                    }*/
+                        /* try {
+                             val compressed = ImageUtils.fileToBase64(this, file, 500, 500)
+                             LibUtils.logE(compressed)
+                         } catch (e: IOException) {
+                             LibUtils.logE(e)
+                             LibUtils.showToast(this, e.message!!)
+                         }*/
 
+                    } else {
+                        LibUtils.showToast(this, "Could not process image")
+                    }
                 }
+
             } else if (requestCode == ImageUtils.IMAGE_GALLERY) {
                 LibUtils.logE(FilePath.getPath(this, data.data!!)!! + " ")
             }

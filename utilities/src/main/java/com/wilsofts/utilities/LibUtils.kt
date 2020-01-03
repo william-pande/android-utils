@@ -14,7 +14,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.text.Html
 import android.util.Log
 import android.view.Gravity
@@ -275,9 +274,9 @@ object LibUtils {
 
     fun extractDatabase(context: Context, database_name: String) {
         try {
-            val storage_file = Environment.getExternalStorageDirectory()
+            val storage_file = context.getExternalFilesDir(null)
 
-            if (storage_file.canWrite()) {
+            if (storage_file != null && storage_file.canWrite()) {
                 val database_path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
                     context.filesDir.absolutePath.replace("files", "databases") + File.separator
                 else
@@ -322,9 +321,9 @@ object LibUtils {
 
     fun writeDBToSD(context: Context, db_name: String) {
         try {
-            val sd = Environment.getExternalStorageDirectory()
+            val file = context.getExternalFilesDir(null)
 
-            if (sd.canWrite()) {
+            if (file != null && file.canWrite()) {
                 val DB_PATH: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     context.filesDir.absolutePath.replace("files", "databases") + File.separator
                 } else {
@@ -332,7 +331,7 @@ object LibUtils {
                 }
 
                 val currentDB = File(DB_PATH, db_name)
-                val backupDB = File(sd, db_name)
+                val backupDB = File(file, db_name)
 
                 if (currentDB.exists()) {
                     val src = FileInputStream(currentDB).channel

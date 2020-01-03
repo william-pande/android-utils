@@ -19,13 +19,14 @@ import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.R
 import com.wilsofts.utilities.dialogs.ReturnResponse
 
+@Suppress("unused")
 class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
     private lateinit var appUpdateManager: AppUpdateManager
     private lateinit var editor: SharedPreferences.Editor
 
     companion object {
-        const val IMMEDIATE = 1
-        const val FLEXIBLE = 2
+        const val IMMEDIATE = AppUpdateType.IMMEDIATE
+        const val FLEXIBLE = AppUpdateType.FLEXIBLE
 
         fun isUpdateAvailable(context: Context, returnResponse: ReturnResponse) {
             val editor: SharedPreferences.Editor = context.getSharedPreferences("updater_prefs", Context.MODE_PRIVATE).edit()
@@ -128,7 +129,7 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
                         appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, FLEXIBLE)
                     }
                 }
-            }else{
+            } else {
                 this.finish()
             }
         }

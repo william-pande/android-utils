@@ -14,28 +14,26 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 object ImageUtils {
     const val IMAGE_GALLERY = 101
     const val IMAGE_CAMERA = 100
 
-    @Throws(IOException::class)
     fun createImageFile(activity: FragmentActivity): File {
         @SuppressLint("SimpleDateFormat")
-        var time = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        var time = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         time = "JPEG_" + time + "_"
 
         val storage_dir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(time, ".jpg", storage_dir)
     }
 
-    @Throws(IOException::class)
-    fun createImageFile(parent: String): File? {
+    fun createImageFile(activity: FragmentActivity, parent: String): File? {
         @SuppressLint("SimpleDateFormat")
-        var time = java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        var time = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         time = "JPEG_" + time + "_"
 
-        val storage_dir = File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), parent)
+        val storage_dir = File(activity.getExternalFilesDir(Environment.DIRECTORY_DCIM), parent)
         if (!storage_dir.exists()) {
             if (!storage_dir.mkdirs()) {
                 return null
@@ -53,7 +51,6 @@ object ImageUtils {
         }
     }
 
-    @Throws(IOException::class)
     fun fileToBase64(file: File): String {
         val size = file.length().toInt()
         val bytes = ByteArray(size)
@@ -65,7 +62,7 @@ object ImageUtils {
         return Base64.encodeToString(bytes, Base64.DEFAULT)
     }
 
-    @Throws(IOException::class)
+
     fun fileToBase64(context: Context, original_file: File, max_width: Int, max_height: Int, quality: Int): String? {
         val compressed = CompressImage(context, original_file.path)
                 .formatJPEG()

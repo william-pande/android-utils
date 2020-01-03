@@ -8,6 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
 
+@Suppress("unused")
 class RetrofitDownloader(call: Call<ResponseBody>, private val downloadResponse: DownloadResponse, private val target_path: File)
     : AsyncTask<ResponseBody, RetrofitDownloader.Progress, String>() {
     init {

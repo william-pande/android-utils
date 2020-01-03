@@ -20,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 class RetrofitClient(private val activity: FragmentActivity?, private val call: Call<String>, title: String) {
     private var show_progress: Boolean = false
     private var dialog: DialogFragment? = null
