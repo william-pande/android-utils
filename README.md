@@ -13,7 +13,7 @@ Including in Your Project
 ```
 
 ### You can override the constants
-
+=================================
 ### The TAG for log cats
 ```kotlin
 LibUtils.TAG = "LIB UTILS"
@@ -68,7 +68,7 @@ LibUtils.URL_LINK = ""
  ```
  
  Contribution
- ============
+ ===================
  ### Pull requests are welcome!
  Feel free to contribute to BetterPickers.
  If you've fixed a bug or have a feature you've added, just create a pull request.
