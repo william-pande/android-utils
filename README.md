@@ -1,6 +1,6 @@
 [![](https://jitpack.io/v/WilliamPande/android-utils.svg)](https://jitpack.io/#WilliamPande/android-utils)
 [![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Betterpickers-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/118)
+[![Android Utils](https://img.shields.io/badge/Android%20Arsenal-Android%20Betterpickers-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/118)
 
 Including in Your Project
 =========================
@@ -67,7 +67,5 @@ LibUtils.URL_LINK = ""
  Contribution
  ===================
  ### Pull requests are welcome!
- Feel free to contribute to BetterPickers.
+ Feel free to contribute to Android Utils.
  If you've fixed a bug or have a feature you've added, just create a pull request.
-
- If you've found a bug, want a new feature, or have other questions, [file an issue][10]. We will try to answer as soon as possible.
