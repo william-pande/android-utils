@@ -12,7 +12,7 @@ Including in Your Project
     implementation 'com.github.william-pande:android-utils:x.x.x'
 ```
 
-### You can override the constants
+You can override the constants
 =================================
 ### The TAG for log cats
 ```kotlin
