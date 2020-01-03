@@ -1,3 +1,5 @@
+@file:Suppress("unused", "MemberVisibilityCanBePrivate")
+
 package com.wilsofts.utilities
 
 import android.annotation.SuppressLint
@@ -222,7 +224,7 @@ object LibUtils {
             @SuppressLint("SimpleDateFormat")
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val date = simpleDateFormat.parse(string_date)
-            return date.time / 1000
+            return date!!.time / 1000
         } catch (e: ParseException) {
             logE(e)
         }
@@ -244,7 +246,7 @@ object LibUtils {
             @SuppressLint("SimpleDateFormat")
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
             val date = simpleDateFormat.parse(string_date)
-            return date.time / 1000
+            return date!!.time / 1000
         } catch (e: ParseException) {
             logE(e)
         }
@@ -410,7 +412,7 @@ object LibUtils {
 
         override fun onResume() {
             super.onResume()
-            val window = this.dialog.window
+            val window = this.dialog?.window
             if (window != null) {
                 val point = Point()
                 val display = window.windowManager.defaultDisplay

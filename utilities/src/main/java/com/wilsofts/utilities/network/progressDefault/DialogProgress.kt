@@ -36,7 +36,7 @@ class DialogProgress : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        val window = this.dialog.window
+        val window = this.dialog?.window
         if (window != null) {
             val point = Point()
             val display = window.windowManager.defaultDisplay

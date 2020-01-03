@@ -1,6 +1,4 @@
 [![](https://jitpack.io/v/WilliamPande/android-utils.svg)](https://jitpack.io/#WilliamPande/android-utils)
-[![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
-[![Android Utils](https://img.shields.io/badge/Android%20Arsenal-Android%20Betterpickers-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/118)
 
 Including in Your Project
 =========================

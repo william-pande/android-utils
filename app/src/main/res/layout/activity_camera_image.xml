@@ -1,68 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        tools:context=".CameraImageActivity">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1">
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/image_view"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/image_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:background="@android:drawable/picture_frame"
-                    android:contentDescription="@string/camera_image_text"
-                    android:scaleType="fitXY" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-                <ImageButton
-                    android:id="@+id/photo_camera"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@null"
-                    android:contentDescription="@string/camera_image_text"
-                    android:scaleX="1.3"
-                    android:scaleY="1.3"
-                    android:tint="@color/colorPrimaryDark"
-                    app:srcCompat="@drawable/icon_photo_camera" />
-
-                <ImageButton
-                    android:id="@+id/photo_library"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="@string/camera_image_text"
-                    android:scaleX="1.3"
-                    android:scaleY="1.3"
-                    android:tint="@color/colorPrimaryDark"
-                    app:srcCompat="@drawable/icon_photo_library" />
-
-            </LinearLayout>
+                android:layout_height="200dp"
+                android:background="@android:drawable/picture_frame"
+                android:contentDescription="@string/camera_image_text"
+                android:scaleType="fitXY" />
 
         </LinearLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
+            <ImageButton
+                android:id="@+id/photo_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:contentDescription="@string/camera_image_text"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                android:tint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/icon_photo_camera" />
+
+            <ImageButton
+                android:id="@+id/photo_library"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@string/camera_image_text"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                android:tint="@color/colorPrimaryDark"
+                app:srcCompat="@drawable/icon_photo_library" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 </layout>
