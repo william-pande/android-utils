@@ -34,18 +34,17 @@ LibUtils.CONNECT_TIMEOUT = 10
 LibUtils.READ_TIMEOUT = 10
 ```
 
-
-# Connection write time out
+### Connection write time out
 ```kotlin
 LibUtils.WRITE_TIMEOUT = 10
 ```
 
-# The url for   
+### The url for   
 ```kotlin  
 LibUtils.URL_LINK = ""
 ```
 
- # User alert dialog colors
+### User alert dialog colors
  ```xml
 <resources>
     <color name="alert_dialog_background">@color/colorPrimary</color>
@@ -59,7 +58,7 @@ LibUtils.URL_LINK = ""
 </resources>
  ```
  
- # User alert dimensions
+### User alert dimensions
  ```xml
  <resources>
     <dimen name="alert_dialog_radius">5dp</dimen>
