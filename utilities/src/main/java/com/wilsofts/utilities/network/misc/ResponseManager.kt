@@ -17,10 +17,13 @@ class ResponseManager(private val call: Call<String>, val networkResponse: Netwo
     }
 
     private fun response() {
-        if (this.activity != null && LibUtils.noInternetConnection(this.activity)) {
-            networkResponse.error(true, null)
-            return
+        if(LibUtils.CHECK_NETWORK){
+            if (this.activity != null && LibUtils.noInternetConnection(this.activity)) {
+                networkResponse.error(true, null)
+                return
+            }
         }
+
 
         if (this.show_progress && this.activity != null && this.dialog != null) {
             this.showDialog()

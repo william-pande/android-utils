@@ -44,6 +44,7 @@ import java.util.regex.Pattern
 object LibUtils {
     var TAG = "LIB UTILS"
     var SHOW_LOG = true
+    var CHECK_NETWORK = true
 
     var CONNECT_TIMEOUT = 10
     var READ_TIMEOUT = 10
