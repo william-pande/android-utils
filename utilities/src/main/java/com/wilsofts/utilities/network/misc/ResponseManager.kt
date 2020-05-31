@@ -3,40 +3,36 @@ package com.wilsofts.utilities.network.misc
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.wilsofts.utilities.LibUtils
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 
-class ResponseManager(private val call: Call<String>, val networkResponse: NetworkResponse, val dialog: DialogFragment?,
+class ResponseManager(private val call: Call<String>, val response: ServerResponse, val dialog: DialogFragment?,
                       val activity: FragmentActivity?, val show_progress: Boolean) {
     init {
-        this.response()
+        this.process()
     }
 
-    private fun response() {
-        if(LibUtils.CHECK_NETWORK){
-            if (this.activity != null && LibUtils.noInternetConnection(this.activity)) {
-                networkResponse.error(true, null)
-                return
-            }
-        }
-
-
+    private fun process() {
         if (this.show_progress && this.activity != null && this.dialog != null) {
             this.showDialog()
         }
 
         this.call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
+                LibUtils.logE("${response.code()}")
+                this@ResponseManager.hideDialog()
                 try {
                     if (response.isSuccessful) {
-                        this@ResponseManager.hideDialog()
-                        LibUtils.logE("code = " + response.code() + " and message = " + response.body() + " ")
-                        networkResponse.success(response.code(), response.body()!!)
-
+                        LibUtils.logE(JSONObject(response.body()!!).toString(2))
+                        this@ResponseManager.response.send(status = response.code(), response = JSONObject(response.body()!!),
+                                throwable = null, network = false)
                     } else {
                         val error_body = response.errorBody()
                         if (error_body != null) {
@@ -48,32 +44,31 @@ class ResponseManager(private val call: Call<String>, val networkResponse: Netwo
                                 builder.append(line).append("\n")
                                 line = reader.readLine()
                             }
-                            this@ResponseManager.hideDialog()
-                            LibUtils.logE("code = " + response.code() + " and message = " + builder.toString())
-                            networkResponse.success(response.code(), builder.toString())
-
+                            val message = builder.toString()
+                            val json = if (message.isNotEmpty()) JSONObject(message) else JSONObject()
+                            LibUtils.logE(json.toString(2))
+                            this@ResponseManager.response.send(status = response.code(), response = json, throwable = null, network = false)
                         } else {
-                            this@ResponseManager.hideDialog()
-                            networkResponse.success(response.code(), "")
-                            LibUtils.logE("code = " + response.code())
+                            this@ResponseManager.response.send(status = response.code(),
+                                    response = JSONObject(), throwable = null, network = false)
                         }
                     }
                 } catch (error: Exception) {
                     this@ResponseManager.hideDialog()
                     LibUtils.logE(error)
-                    networkResponse.error(false, null)
-                    LibUtils.logE("code = ${response.code()}")
+                    this@ResponseManager.response.send(status = response.code(), response = JSONObject(),
+                            throwable = error, network = false)
                 }
             }
 
             override fun onFailure(call: Call<String>, throwable: Throwable) {
                 this@ResponseManager.hideDialog()
-                LibUtils.logE("Error = $throwable")
-                if (throwable is SocketTimeoutException) {
-                    networkResponse.error(true, throwable)
-                } else {
-                    networkResponse.error(false, throwable)
-                }
+                this@ResponseManager.response.send(
+                        status = -1,
+                        response = JSONObject(),
+                        throwable = throwable,
+                        network = throwable is IOException
+                )
             }
         })
     }

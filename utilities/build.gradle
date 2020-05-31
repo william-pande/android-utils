@@ -67,7 +67,6 @@ dependencies {
 
     /*for easy preference management*/
     api 'com.pixplicity.easyprefs:library:1.9.0'
-
     api 'com.github.joielechong:countrycodepicker:2.3.0'
 
     testImplementation 'junit:junit:4.12'

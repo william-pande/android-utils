@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.misc.NetworkResponse
 import com.wilsofts.utilities.network.misc.ResponseManager
+import com.wilsofts.utilities.network.misc.ServerResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -20,10 +20,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog: DialogProgressLinear?, networkResponse: NetworkResponse) {
+class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog: DialogProgressLinear?,
+                     response: ServerResponse) {
 
     init {
-        ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = true)
+        ResponseManager(call = call, response = response, dialog = dialog, activity = activity, show_progress = true)
     }
 
     companion object {
@@ -78,7 +79,8 @@ class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog
         }
 
         fun getBody(parameters: Map<String, Any>): RequestBody {
-            return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSONObject(parameters).toString())
+            return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
+                    JSONObject(parameters).toString())
         }
     }
 }

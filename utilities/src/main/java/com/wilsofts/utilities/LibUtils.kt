@@ -27,7 +27,6 @@ import androidx.annotation.DimenRes
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wilsofts.utilities.dialogs.ReturnResponse
@@ -99,14 +98,15 @@ object LibUtils {
         if (SHOW_LOG) {
             Log.e(TAG, throwable.message, throwable)
         }
+        throwable.printStackTrace()
     }
 
-    fun showToast(activity: FragmentActivity, toast: String) {
-        Toast.makeText(activity, toast, Toast.LENGTH_LONG).show()
+    fun showToast(context: Context, toast: String) {
+        Toast.makeText(context, toast, Toast.LENGTH_LONG).show()
     }
 
-    fun showErrorToast(activity: FragmentActivity) {
-        showToast(activity, activity.getString(R.string.request_unsuccessful))
+    fun showErrorToast(context: Context) {
+        showToast(context, context.getString(R.string.request_unsuccessful))
     }
 
     fun restart(intent: Intent, context: Context) {
@@ -228,7 +228,6 @@ object LibUtils {
         } catch (e: ParseException) {
             logE(e)
         }
-
         return 0
     }
 
@@ -250,7 +249,6 @@ object LibUtils {
         } catch (e: ParseException) {
             logE(e)
         }
-
         return 0
     }
 
@@ -297,7 +295,6 @@ object LibUtils {
         } catch (e: IOException) {
             logE(e)
         }
-
     }
 
     fun listBundle(intent: Intent) {

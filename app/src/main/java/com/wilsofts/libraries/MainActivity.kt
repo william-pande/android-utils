@@ -4,17 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-
 import com.wilsofts.libraries.databinding.ActivityMainBinding
 import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.dialogs.ReturnResponse
 import com.wilsofts.utilities.image.ImageUtils
-import com.wilsofts.utilities.network.misc.NetworkResponse
+import com.wilsofts.utilities.network.misc.ServerResponse
 import com.wilsofts.utilities.network.progressDefault.RetrofitClient
-
-import org.json.JSONException
 import org.json.JSONObject
-
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -28,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        //this.networkTest();
+        this.networkTest();
         //this.confirmAlert();
 
         this.binding!!.cameraImageText.setOnClickListener { listener ->
@@ -58,20 +54,14 @@ class MainActivity : AppCompatActivity() {
     private fun networkTest() {
         LibUtils.SHOW_LOG = true
 
-        val call = RetrofitClient.retrofit.create(Api::class.java)
+        val call = RetrofitClient.getRetrofit("https://api.ichuzz2work.com/").create(Api::class.java)
                 .login_user("pande2@gmail.com", "123456s789")
         RetrofitClient(this, call, "Testing please wait")
-                .initRequest(object : NetworkResponse {
-                    @Throws(JSONException::class)
-                    override fun success(code: Int, message: String) {
-                        val response = JSONObject(message)
-                    }
-
-                    override fun error(timeout: Boolean, throwable: Throwable?) {
+                .initRequest(object : ServerResponse {
+                    override fun send(status: Int, response: JSONObject, throwable: Throwable?, network: Boolean) {
 
                     }
                 })
-
     }
 
     internal interface Api {

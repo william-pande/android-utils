@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.misc.NetworkResponse
 import com.wilsofts.utilities.network.misc.ResponseManager
+import com.wilsofts.utilities.network.misc.ServerResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
@@ -42,8 +42,8 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
         return this
     }
 
-    fun initRequest(networkResponse: NetworkResponse) {
-        ResponseManager(call = call, networkResponse = networkResponse, dialog = dialog, activity = activity, show_progress = show_progress)
+    fun initRequest(response: ServerResponse) {
+        ResponseManager(call = call, response = response, dialog = dialog, activity = activity, show_progress = show_progress)
     }
 
     companion object {
