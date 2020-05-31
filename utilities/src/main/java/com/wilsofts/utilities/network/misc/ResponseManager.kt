@@ -31,8 +31,7 @@ class ResponseManager(private val call: Call<String>, val response: ServerRespon
                 try {
                     if (response.isSuccessful) {
                         LibUtils.logE(JSONObject(response.body()!!).toString(2))
-                        this@ResponseManager.response.send(status = response.code(), response = JSONObject(response.body()!!),
-                                throwable = null, network = false)
+                        this@ResponseManager.response.success(status = response.code(), response = JSONObject(response.body()!!))
                     } else {
                         val error_body = response.errorBody()
                         if (error_body != null) {
@@ -47,28 +46,21 @@ class ResponseManager(private val call: Call<String>, val response: ServerRespon
                             val message = builder.toString()
                             val json = if (message.isNotEmpty()) JSONObject(message) else JSONObject()
                             LibUtils.logE(json.toString(2))
-                            this@ResponseManager.response.send(status = response.code(), response = json, throwable = null, network = false)
+                            this@ResponseManager.response.success(status = response.code(), response = json)
                         } else {
-                            this@ResponseManager.response.send(status = response.code(),
-                                    response = JSONObject(), throwable = null, network = false)
+                            this@ResponseManager.response.success(status = response.code(), response = JSONObject())
                         }
                     }
                 } catch (error: Exception) {
                     this@ResponseManager.hideDialog()
                     LibUtils.logE(error)
-                    this@ResponseManager.response.send(status = response.code(), response = JSONObject(),
-                            throwable = error, network = false)
+                    this@ResponseManager.response.error(                            throwable = error, network = false)
                 }
             }
 
             override fun onFailure(call: Call<String>, throwable: Throwable) {
                 this@ResponseManager.hideDialog()
-                this@ResponseManager.response.send(
-                        status = -1,
-                        response = JSONObject(),
-                        throwable = throwable,
-                        network = throwable is IOException
-                )
+                this@ResponseManager.response.error(throwable = throwable, network = throwable is IOException)
             }
         })
     }

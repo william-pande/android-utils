@@ -5,5 +5,7 @@ import org.json.JSONObject
 
 interface ServerResponse {
     @Throws(JSONException::class)
-    fun send(status: Int, response: JSONObject, throwable: Throwable?, network: Boolean)
+    fun success(status: Int, response: JSONObject)
+
+    fun error(throwable: Throwable, network: Boolean)
 }
