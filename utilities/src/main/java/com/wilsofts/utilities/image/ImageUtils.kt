@@ -9,6 +9,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import java.io.*
 import java.text.SimpleDateFormat
@@ -42,12 +43,21 @@ object ImageUtils {
         return File.createTempFile(time, ".jpg", storage_dir)
     }
 
-    fun captureImage(context: FragmentActivity, photo_file: File, authority: String) {
+    fun captureImage(activity: FragmentActivity, photo_file: File, authority: String) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(context.packageManager) != null) {
-            val photo_ui = FileProvider.getUriForFile(context, authority, photo_file)
+        if (intent.resolveActivity(activity.packageManager) != null) {
+            val photo_ui = FileProvider.getUriForFile(activity, authority, photo_file)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photo_ui)
-            context.startActivityForResult(intent, IMAGE_CAMERA)
+            activity.startActivityForResult(intent, IMAGE_CAMERA)
+        }
+    }
+
+    fun captureImage(fragment: Fragment, photo_file: File, authority: String) {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (intent.resolveActivity(fragment.requireContext().packageManager) != null) {
+            val photo_ui = FileProvider.getUriForFile(fragment.requireContext(), authority, photo_file)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photo_ui)
+            fragment.startActivityForResult(intent, IMAGE_CAMERA)
         }
     }
 

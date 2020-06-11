@@ -45,9 +45,9 @@ object LibUtils {
     var SHOW_LOG = true
     var CHECK_NETWORK = true
 
-    var CONNECT_TIMEOUT = 10
-    var READ_TIMEOUT = 10
-    var WRITE_TIMEOUT = 10
+    var CONNECT_TIMEOUT = 60
+    var READ_TIMEOUT = 60
+    var WRITE_TIMEOUT = 60
 
     var URL_LINK = ""
 
@@ -264,10 +264,11 @@ object LibUtils {
     fun formatNumber(number: Double): String {
         @SuppressLint("DefaultLocale")
         val formatted = String.format("%,.2f", number)
-        if (formatted.endsWith(".00"))
+        if (formatted.endsWith(".00")) {
             return formatted.substring(0, formatted.length - 3)
-        else if (formatted.contains(".") && formatted.endsWith("0"))
+        } else if (formatted.contains(".") && formatted.endsWith("0")) {
             return formatted.substring(0, formatted.length - 2)
+        }
         return formatted
     }
 
@@ -373,9 +374,7 @@ object LibUtils {
 
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             val activity = this.activity
-            this.extras = this.arguments
-            assert(this.extras != null)
-            assert(activity != null)
+            this.extras = this.arguments!!
 
             val returnResponse = this.extras!!.getSerializable("returnResponse") as ReturnResponse
 

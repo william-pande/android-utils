@@ -6,20 +6,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.util.*
 
 @Suppress("unused")
 class MyTimePicker : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current time as the default values for the picker
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+    private var hour = 0
+    private var minute = 0
 
-        // Create a new instance of TimePickerDialog and return it
-        return TimePickerDialog(activity!!, this, hour, minute, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.arguments?.let {
+            this.hour = it.getInt("hour")
+            this.minute = it.getInt("minute")
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return TimePickerDialog(this.activity!!, this, this.hour, this.minute, false)
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
@@ -36,9 +42,15 @@ class MyTimePicker : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     }
 
     companion object {
-        fun showTimePickerDialog(fragmentManager: FragmentManager) {
-            val newFragment = MyTimePicker()
-            newFragment.show(fragmentManager, "time_picker")
+        fun showTimePickerDialog(activity: FragmentActivity, hour: Int = -1, minute: Int = -1) {
+            val calendar = Calendar.getInstance()
+            val dialog = MyTimePicker().apply {
+                this.arguments = Bundle().apply {
+                    this.putInt("hour", if (hour == -1) calendar.get(Calendar.HOUR_OF_DAY) else hour)
+                    this.putInt("minute", if (minute == -1) calendar.get(Calendar.MINUTE) else minute)
+                }
+            }
+            dialog.show(activity.supportFragmentManager, "time_picker")
         }
     }
 }

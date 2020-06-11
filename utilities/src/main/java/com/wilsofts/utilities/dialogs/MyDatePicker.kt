@@ -7,44 +7,48 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("unused")
 class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
+    private var min_date = 0L
+    private var max_date = 0L
+    private var current_date = 0L
+    private var pattern = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.arguments?.let {
+            this.min_date = it.getLong("min_date") * 1000
+            this.max_date = it.getLong("max_date") * 1000
+            this.current_date = it.getLong("current_date") * 1000
+            this.pattern = it.getString("pattern")!!
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
         val calendar = Calendar.getInstance()
+
         // Create a new instance of DatePickerDialog and return it
-        var dialog = DatePickerDialog(this.activity!!, this, calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-        val bundle = this.arguments
-        if (bundle != null) {
-            if (bundle.containsKey("current_date")) {
-                val current_date = bundle.getString("current_date")
-                if (current_date != null) {
-                    calendar.timeInMillis = current_date.toLong()
-                    dialog = DatePickerDialog(this.activity!!, this, calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-                }
-            }
+        val dialog = if (this.current_date != 0L) {
+            calendar.timeInMillis = this.current_date
+            DatePickerDialog(this.requireContext(), this, calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        } else {
+            DatePickerDialog(this.requireContext(), this, calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        }
 
-            if (bundle.containsKey("min_date")) {
-                val min_date = bundle.getString("min_date")
-                if (min_date != null) {
-                    dialog.datePicker.minDate = min_date.toLong()
-                }
-            }
+        if (this.min_date != 0L) {
+            dialog.datePicker.minDate = this.min_date
+        }
 
-            if (bundle.containsKey("max_date")) {
-                val max_date = bundle.getString("max_date")
-                if (max_date != null) {
-                    dialog.datePicker.maxDate = max_date.toLong()
-                }
-            }
+        if (this.max_date != 0L) {
+            dialog.datePicker.maxDate = this.max_date
         }
         return dialog
     }
@@ -60,42 +64,28 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
         calendar.set(Calendar.MILLISECOND, 0)
 
         @SuppressLint("SimpleDateFormat")
-        val format = SimpleDateFormat("EEE dd MMM yyyy")
+        val format = SimpleDateFormat(this.pattern)
         val date = Date(calendar.timeInMillis)
 
         val intent = Intent("date_time")
         intent.putExtra("string_date", format.format(date))
-        intent.putExtra("epoch_date", calendar.timeInMillis)
-        LocalBroadcastManager.getInstance(activity!!).sendBroadcast(intent)
+        intent.putExtra("epoch_date", calendar.timeInMillis / 1000)
+        LocalBroadcastManager.getInstance(this.activity!!).sendBroadcast(intent)
     }
 
     companion object {
-        fun newInstance(min_date: String?, max_date: String?): MyDatePicker {
-            val datePicker = MyDatePicker()
-            val bundle = Bundle()
-            bundle.putString("min_date", min_date)
-            bundle.putString("max_date", max_date)
-            datePicker.arguments = bundle
-            return datePicker
-        }
+        fun newInstance(activity: FragmentActivity, current_date: Long = 0L, min_date: Long = 0L,
+                        max_date: Long = 0L, pattern: String = "EEE dd MMM yyyy") {
 
-        fun newInstance(current_date: String?, min_date: String?, max_date: String?): MyDatePicker {
-            val datePicker = MyDatePicker()
-            val bundle = Bundle()
-            bundle.putString("min_date", min_date)
-            bundle.putString("max_date", max_date)
-            bundle.putString("current_date", current_date)
-            datePicker.arguments = bundle
-            return datePicker
-        }
-
-        fun showDatePickerDialog(fragmentManager: FragmentManager) {
-            val newFragment = MyDatePicker()
-            newFragment.show(fragmentManager, "date_picker")
-        }
-
-        fun showDatePickerDialog(fragmentManager: FragmentManager, datePicker: MyDatePicker) {
-            datePicker.show(fragmentManager, "date_picker")
+            val dialog = MyDatePicker().apply {
+                this.arguments = Bundle().apply {
+                    this.putLong("min_date", min_date)
+                    this.putLong("max_date", max_date)
+                    this.putLong("current_date", current_date)
+                    this.putString("pattern", pattern)
+                }
+            }
+            dialog.show(activity.supportFragmentManager, "date_picker")
         }
     }
 }
