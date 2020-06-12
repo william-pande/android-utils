@@ -109,9 +109,12 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                 when {
                     appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) -> {
-                        val dialog = LibUtils.ConfirmationDialog.newInstance(this,
-                                "New Update", "A new update has been released, do you wish to continue updating your app?",
-                                object : ReturnResponse {
+                        LibUtils.ConfirmationDialog.newInstance(
+                                activity = this,
+                                title = "New Update",
+                                message = "A new update has been released, do you wish to continue updating your app?",
+                                check = "Ignore this app update",
+                                response = object : ReturnResponse {
                                     override fun response(proceed: Boolean, ignored: Boolean) {
                                         editor.putBoolean("ignored", ignored)
                                         editor.apply()
@@ -121,9 +124,7 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
                                                     this@AppUpdaterActivity, IMMEDIATE)
                                         }
                                     }
-                                },
-                                "Ignore this app update")
-                        dialog.show(this.supportFragmentManager, "confirm_update")
+                                })
                     }
                     appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) -> {
                         appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, FLEXIBLE)
