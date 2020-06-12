@@ -27,6 +27,7 @@ import androidx.annotation.DimenRes
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.wilsofts.utilities.dialogs.ReturnResponse
@@ -424,32 +425,23 @@ object LibUtils {
         }
 
         companion object {
-            fun newInstance(context: Context, title: String, message: String, returnResponse: ReturnResponse, check: String = ""): ConfirmationDialog {
-                return newInstance(title, message, context.getString(R.string.proceed), context.getString(R.string.cancel), Gravity.CENTER, 0, 0, returnResponse, check)
-            }
-
-            fun newInstance(context: Context, title: String, message: String, gravity: Int, offset_x: Int, offset_y: Int,
-                            returnResponse: ReturnResponse, check: String = ""): ConfirmationDialog {
-                return newInstance(title, message, context.getString(R.string.proceed), context.getString(R.string.cancel), gravity, offset_x, offset_y, returnResponse, check)
-            }
-
-            fun newInstance(title: String, message: String, ok: String, cancel: String, gravity: Int, offset_x: Int,
-                            offset_y: Int, returnResponse: ReturnResponse, check: String = ""): ConfirmationDialog {
-                val dialog = ConfirmationDialog()
-
-                val extras = Bundle()
-                extras.putString("title", title)
-                extras.putString("message", message)
-                extras.putString("ok", ok)
-                extras.putString("cancel", cancel)
-                extras.putInt("gravity", gravity)
-                extras.putInt("offset_y", offset_y)
-                extras.putInt("offset_x", offset_x)
-                extras.putString("check", check)
-                extras.putSerializable("returnResponse", returnResponse)
-                dialog.arguments = extras
-
-                return dialog
+            fun newInstance(title: String, message: String, ok: String = "Proceed", cancel: String = "Cancel",
+                            gravity: Int = Gravity.CENTER, offset_x: Int = 0, offset_y: Int = 0, response: ReturnResponse,
+                            check: String = "", activity: FragmentActivity) {
+                val dialog = ConfirmationDialog().apply {
+                    this.arguments = Bundle().apply {
+                        this.putString("title", title)
+                        this.putString("message", message)
+                        this.putString("ok", ok)
+                        this.putString("cancel", cancel)
+                        this.putInt("gravity", gravity)
+                        this.putInt("offset_y", offset_y)
+                        this.putInt("offset_x", offset_x)
+                        this.putString("check", check)
+                        this.putSerializable("returnResponse", response)
+                    }
+                }
+                dialog.show(activity.supportFragmentManager, "user_confirmation")
             }
         }
     }
