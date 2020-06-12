@@ -110,7 +110,8 @@ object LibUtils {
         showToast(context, context.getString(R.string.request_unsuccessful))
     }
 
-    fun restart(intent: Intent, context: Context) {
+    fun restart(context: Context, cls: Class<*>) {
+        val intent = Intent(context, cls)
         // Closing all the Activities from stack
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         // Add new Flag to start new Activity
