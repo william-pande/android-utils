@@ -23,7 +23,7 @@ class ProgressUpdater {
 
         override fun source(): BufferedSource {
             if (this.bufferedSource == null) {
-                this.bufferedSource = Okio.buffer(this.source(this.responseBody.source()))
+                this.bufferedSource = this.source(this.responseBody.source()).buffer()
             }
             return this.bufferedSource!!
         }

@@ -50,7 +50,7 @@ class RetrofitDownloader(call: Call<ResponseBody>, private val downloadResponse:
             inputStream = body.byteStream()
             outputStream = FileOutputStream(this.target_path)
             val data = ByteArray(4096)
-            var count: Int = inputStream!!.read(data)
+            var count: Int = inputStream.read(data)
             var progress: Long = 0
             val fileSize = body.contentLength()
 

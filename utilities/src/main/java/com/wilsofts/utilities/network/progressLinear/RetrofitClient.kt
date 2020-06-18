@@ -8,8 +8,10 @@ import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.network.misc.ResponseManager
 import com.wilsofts.utilities.network.misc.ServerResponse
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Call
@@ -51,7 +53,7 @@ class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog
                     .addNetworkInterceptor { chain ->
                         val originalResponse = chain.proceed(chain.request())
                         originalResponse.newBuilder()
-                                .body(ProgressUpdater.ProgressResponseBody(originalResponse.body()!!, listener))
+                                .body(ProgressUpdater.ProgressResponseBody(originalResponse.body!!, listener))
                                 .build()
                     }
 
@@ -79,8 +81,7 @@ class RetrofitClient(activity: FragmentActivity?, call: Call<String>, var dialog
         }
 
         fun getBody(parameters: Map<String, Any>): RequestBody {
-            return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                    JSONObject(parameters).toString())
+            return JSONObject(parameters).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         }
     }
 }

@@ -6,49 +6,115 @@ import androidx.fragment.app.FragmentActivity
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
-import com.wilsofts.utilities.network.misc.ResponseManager
+import com.wilsofts.utilities.network.misc.Response
 import com.wilsofts.utilities.network.misc.ServerResponse
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
-class RetrofitClient(private val activity: FragmentActivity?, private val call: Call<String>, title: String) {
-    private var show_progress: Boolean = false
-    private var dialog: DialogFragment? = null
+class RetrofitClient(
+        private val activity: FragmentActivity?,
+        private val call: Call<String>,
+        title: String = "",
+        dialog: DialogFragment? = null,
+        private val server_response: ServerResponse? = null,
+        private val response: Response? = null) {
+
+    private var dialog: DialogFragment
 
     init {
-        this.show_progress = true
-        if (this.activity != null) {
+        if (dialog == null) {
             this.dialog = DialogProgress.newInstance(title)
+        } else {
+            this.dialog = dialog
         }
+        this.process()
     }
 
-    fun initProgress(): RetrofitClient {
-        this.show_progress = false
-        return this
-    }
+    private fun process() {
+        if (this.activity != null) {
+            this.dialog.show(activity.supportFragmentManager, "network_dialog")
+        }
 
-    fun initDialog(dialog: DialogFragment): RetrofitClient {
-        this.dialog = dialog
-        return this
-    }
+        fun hide_dialog() {
+            this.dialog.dismiss()
+        }
 
-    fun initRequest(response: ServerResponse) {
-        ResponseManager(call = call, response = response, dialog = dialog, activity = activity, show_progress = show_progress)
+        this.call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: retrofit2.Response<String>) {
+                LibUtils.logE("${response.code()}")
+                hide_dialog()
+
+                try {
+                    if (response.isSuccessful) {
+                        LibUtils.logE(JSONObject(response.body()!!).toString(2))
+                        val json = JSONObject(response.body()!!)
+                        this@RetrofitClient.server_response?.success(status = response.code(), response = json)
+                        this@RetrofitClient.response?.response(status = response.code(), response = json)
+
+                    } else {
+                        val error_body = response.errorBody()
+                        if (error_body != null) {
+                            val stream = error_body.byteStream()
+                            val reader = BufferedReader(InputStreamReader(stream))
+                            val builder = StringBuilder()
+                            var line: String? = reader.readLine()
+                            while (line != null) {
+                                builder.append(line).append("\n")
+                                line = reader.readLine()
+                            }
+                            val message = builder.toString()
+                            val json = if (message.isNotEmpty()) JSONObject(message) else JSONObject()
+                            LibUtils.logE(json.toString(2))
+                            this@RetrofitClient.server_response?.success(status = response.code(), response = json)
+                            this@RetrofitClient.response?.response(status = response.code(), response = json)
+
+                        } else {
+                            this@RetrofitClient.server_response?.success(status = response.code(), response = JSONObject())
+                            this@RetrofitClient.response?.response(status = response.code(), response = JSONObject())
+                        }
+                    }
+                } catch (error: Exception) {
+                    LibUtils.logE(error)
+                    this@RetrofitClient.server_response?.error(throwable = error, network = false)
+                    this@RetrofitClient.response?.response(
+                            status = response.code(), response = JSONObject().put("error", error.localizedMessage))
+                }
+            }
+
+            override fun onFailure(call: Call<String>, throwable: Throwable) {
+                hide_dialog()
+                this@RetrofitClient.server_response?.error(throwable = throwable, network = throwable is IOException)
+                this@RetrofitClient.response?.response(
+                        status = 500,
+                        response = JSONObject()
+                                .put("error", throwable.localizedMessage)
+                                .put("network", throwable is IOException)
+                )
+            }
+        })
     }
 
     companion object {
+        val retrofit: Retrofit
+            get() = getRetrofit(Intent(), LibUtils.URL_LINK)
+
         fun getRetrofit(headers: Intent, url: String): Retrofit {
-            LibUtils.logE(url)
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -91,11 +157,8 @@ class RetrofitClient(private val activity: FragmentActivity?, private val call: 
             return getRetrofit(Intent(), url)
         }
 
-        val retrofit: Retrofit
-            get() = getRetrofit(Intent(), LibUtils.URL_LINK)
-
         fun getBody(parameters: Map<String, Any>): RequestBody {
-            return RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), JSONObject(parameters).toString())
+            return JSONObject(parameters).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         }
     }
 }

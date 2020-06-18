@@ -9,3 +9,7 @@ interface ServerResponse {
 
     fun error(throwable: Throwable, network: Boolean)
 }
+
+interface Response{
+    fun response(status: Int, response: JSONObject)
+}

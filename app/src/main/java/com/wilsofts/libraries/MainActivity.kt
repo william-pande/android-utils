@@ -27,21 +27,21 @@ class MainActivity : AppCompatActivity() {
         this.networkTest();
         //this.confirmAlert();
 
-        this.binding!!.cameraImageText.setOnClickListener { listener ->
-            this.startActivity(
-                    Intent(this, CameraImageActivity::class.java))
+        this.binding!!.cameraImageText.setOnClickListener {
+            this.startActivity(Intent(this, CameraImageActivity::class.java))
         }
     }
 
     private fun confirmAlert() {
-        val dialog = LibUtils.ConfirmationDialog.newInstance(this,
-                "Hello", "This is my message now.\n<b>This is now formatted</b>",
-                object : ReturnResponse {
+        LibUtils.ConfirmationDialog.newInstance(
+                activity = this,
+                title = "Hello",
+                message = "This is my message now.\n<b>This is now formatted</b>",
+                response = object : ReturnResponse {
                     override fun response(proceed: Boolean, ignored: Boolean) {
                         LibUtils.logE(proceed.toString() + "")
                     }
                 })
-        dialog.show(this.supportFragmentManager, "missiles")
     }
 
     private fun compress() {
@@ -56,12 +56,19 @@ class MainActivity : AppCompatActivity() {
 
         val call = RetrofitClient.getRetrofit("https://api.ichuzz2work.com/").create(Api::class.java)
                 .login_user("pande2@gmail.com", "123456s789")
-        RetrofitClient(this, call, "Testing please wait")
-                .initRequest(object : ServerResponse {
-                    override fun send(status: Int, response: JSONObject, throwable: Throwable?, network: Boolean) {
+        RetrofitClient(
+                activity = this, call = call,
+                title = "Testing please wait",
+                server_response = object : ServerResponse {
+                    override fun success(status: Int, response: JSONObject) {
+
+                    }
+
+                    override fun error(throwable: Throwable, network: Boolean) {
 
                     }
                 })
+
     }
 
     internal interface Api {
