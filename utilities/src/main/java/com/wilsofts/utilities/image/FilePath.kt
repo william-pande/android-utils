@@ -5,8 +5,10 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import com.wilsofts.utilities.LibUtils
 import java.io.File
 
 object FilePath {
@@ -18,7 +20,7 @@ object FilePath {
      * @param context The context.
      * @param uri     The Uri to query.
      */
-    fun getPath(context: Context, uri: Uri): String? {
+    fun getPath(context: Context, uri: Uri, external: Boolean = true): String? {
         // DocumentProvider
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
@@ -28,7 +30,15 @@ object FilePath {
                 val type = split[0]
 
                 if ("primary".equals(type, ignoreCase = true)) {
-                    return context.getExternalFilesDir(null)?.absolutePath + File.separator + split[1]
+                    if (external) {
+                        return Environment.getExternalStorageDirectory().absolutePath + File.separator + split[1]
+                    } else {
+                        var main_dir = context.getExternalFilesDir(null)?.absolutePath
+                        if (main_dir != null) {
+                            main_dir = main_dir.substring(0, main_dir.indexOf("Android/data"))
+                            return "$main_dir${File.separator}${split[1]}"
+                        }
+                    }
                 }
 
                 // TODO handle non-primary volumes

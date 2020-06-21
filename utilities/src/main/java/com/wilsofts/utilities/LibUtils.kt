@@ -12,8 +12,11 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.text.Html
 import android.util.Log
 import android.view.Gravity
@@ -67,6 +70,54 @@ object LibUtils {
             activeNetworkInfo = connectivityManager.activeNetworkInfo
         }
         return activeNetworkInfo == null
+    }
+
+    fun uri_to_file(context: Context, uri: Uri, delete: Boolean = true): File? {
+        fun get_file_name(): String? {
+            val file_name: String?
+            logE("Scheme = ${uri.scheme}")
+            if (uri.scheme.equals("file")) {
+                file_name = uri.lastPathSegment
+            } else {
+                context.contentResolver.query(uri, arrayOf(MediaStore.Images.ImageColumns.DISPLAY_NAME),
+                        null, null, null)!!.also {
+                    it.moveToFirst()
+                    file_name = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    //file_name = it.getString(it.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME))
+                    it.close()
+                }
+            }
+            return file_name
+        }
+
+        var destination: File? = null
+        val file_name = get_file_name()
+        if (file_name != null) {
+            var suffix = ""
+            var prefix = file_name
+            if (file_name.contains(".")) {
+                prefix = file_name.substring(0, file_name.lastIndexOf("."))
+                suffix = file_name.substring(file_name.lastIndexOf("."))
+            }
+            destination = File.createTempFile(prefix, suffix, context.externalCacheDir)
+            if (delete) {
+                destination.deleteOnExit()
+            }
+
+            val input_stream = context.contentResolver.openInputStream(uri)
+            val output_stream = FileOutputStream(destination)
+            var len = 0
+            val buffer = ByteArray(1024)
+
+            do {
+                if (len > 0) {
+                    output_stream.write(buffer, 0, len)
+                }
+                len = input_stream?.read(buffer) ?: 0
+            } while (len > 0)
+            input_stream?.close()
+        }
+        return destination
     }
 
     fun showError(coordinatorLayout: CoordinatorLayout, error: String) {

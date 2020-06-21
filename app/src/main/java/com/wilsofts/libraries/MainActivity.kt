@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         val call = RetrofitClient.getRetrofit("https://api.ichuzz2work.com/").create(Api::class.java)
                 .login_user("pande2@gmail.com", "123456s789")
         RetrofitClient(
-                activity = this, call = call,
+                activity = null, call = call,
                 title = "Testing please wait",
                 server_response = object : ServerResponse {
                     override fun success(status: Int, response: JSONObject) {

@@ -12,9 +12,11 @@ import com.wilsofts.utilities.image.FilePath
 import com.wilsofts.utilities.image.ImageUtils
 import java.io.File
 import java.io.IOException
+import java.io.InputStream
 
 class CameraImageActivity : AppCompatActivity() {
     private var binding: ActivityCameraImageBinding? = null
+
     //for storing captured image path
     private var currentPhotoPath: String? = null
 
@@ -68,7 +70,19 @@ class CameraImageActivity : AppCompatActivity() {
                 }
 
             } else if (requestCode == ImageUtils.IMAGE_GALLERY) {
-                LibUtils.logE(FilePath.getPath(this, data.data!!)!! + " ")
+                val uri = data.data
+                if (uri != null) {
+                    val file = LibUtils.uri_to_file(this, uri)
+                    LibUtils.logE("File path = ${file?.absolutePath}")
+                }
+
+                var path = FilePath.getPath(context = this, uri = data.data!!)!!
+                LibUtils.logE(path)
+                LibUtils.logE("Exists = ${File(path).exists()}")
+
+                path = FilePath.getPath(context = this, uri = data.data!!, external = false)!!
+                LibUtils.logE(path)
+                LibUtils.logE("Exists = ${File(path).exists()}")
             }
         }
     }

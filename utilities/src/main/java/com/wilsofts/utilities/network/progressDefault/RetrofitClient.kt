@@ -28,9 +28,9 @@ import java.util.concurrent.TimeUnit
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class RetrofitClient(
-        private val activity: FragmentActivity?,
         private val call: Call<String>,
         title: String = "",
+        private val activity: FragmentActivity? = null,
         dialog: DialogFragment? = null,
         private val server_response: ServerResponse? = null,
         private val response: Response? = null) {
@@ -52,7 +52,9 @@ class RetrofitClient(
         }
 
         fun hide_dialog() {
-            this.dialog.dismiss()
+            if(this.activity != null && this.dialog.isVisible) {
+                this.dialog.dismiss()
+            }
         }
 
         this.call.enqueue(object : Callback<String> {
