@@ -52,20 +52,21 @@ class RetrofitClient(
         }
 
         fun hide_dialog() {
-            if(this.activity != null && this.dialog.isVisible) {
+            if (this.activity != null && this.dialog.isVisible) {
                 this.dialog.dismiss()
             }
         }
 
         this.call.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: retrofit2.Response<String>) {
-                LibUtils.logE("${response.code()}")
+                LibUtils.logE("${response.code()}", "Response")
                 hide_dialog()
 
                 try {
                     if (response.isSuccessful) {
-                        LibUtils.logE(JSONObject(response.body()!!).toString(2))
+                        LibUtils.logE(response.body() ?: "Response must not be null, but otherwise is gotten", "Response")
                         val json = JSONObject(response.body()!!)
+                        LibUtils.logE(json.toString(2), "Response")
                         this@RetrofitClient.server_response?.success(status = response.code(), response = json)
                         this@RetrofitClient.response?.response(status = response.code(), response = json)
 
@@ -82,7 +83,7 @@ class RetrofitClient(
                             }
                             val message = builder.toString()
                             val json = if (message.isNotEmpty()) JSONObject(message) else JSONObject()
-                            LibUtils.logE(json.toString(2))
+                            LibUtils.logE(json.toString(2), "Response")
                             this@RetrofitClient.server_response?.success(status = response.code(), response = json)
                             this@RetrofitClient.response?.response(status = response.code(), response = json)
 
@@ -92,7 +93,7 @@ class RetrofitClient(
                         }
                     }
                 } catch (error: Exception) {
-                    LibUtils.logE(error)
+                    LibUtils.logE(error, "Response")
                     this@RetrofitClient.server_response?.error(throwable = error, network = false)
                     this@RetrofitClient.response?.response(
                             status = response.code(), response = JSONObject().put("error", error.localizedMessage))

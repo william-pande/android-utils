@@ -140,15 +140,15 @@ object LibUtils {
         snack_bar.show()
     }
 
-    fun logE(s: String) {
+    fun logE(s: String, tag: String = TAG) {
         if (SHOW_LOG) {
-            Log.e(TAG, s)
+            Log.e(tag, s)
         }
     }
 
-    fun logE(throwable: Throwable) {
+    fun logE(throwable: Throwable, tag: String = TAG) {
         if (SHOW_LOG) {
-            Log.e(TAG, throwable.message, throwable)
+            Log.e(tag, throwable.message, throwable)
         }
         throwable.printStackTrace()
     }
