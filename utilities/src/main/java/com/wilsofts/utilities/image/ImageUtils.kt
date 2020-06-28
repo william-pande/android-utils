@@ -74,11 +74,11 @@ object ImageUtils {
 
 
     fun fileToBase64(context: Context, original_file: File, max_width: Int, max_height: Int, quality: Int): String? {
-        val compressed = CompressImage(context, original_file.path)
+        val compressed = CompressImage(
+                context = context, path = original_file.path, image_quality = quality,
+                image_height = max_height, image_width = max_width
+        )
                 .formatJPEG()
-                .quality(quality)
-                .height(max_height)
-                .width(max_width)
                 .destination(getCacheDir(context).absolutePath + File.separator + "Compressed")
                 .compressImage() ?: return null
 
@@ -94,35 +94,28 @@ object ImageUtils {
         return cache_directory!!
     }
 
-    class CompressImage(private val context: Context, private val path: String) {
-        private var image_width: Int
-        private var image_height: Int
-        private var image_quality: Int
+    fun generate_image_name(suffix: String): String {
+        //SDF to generate a unique name for our compress file.
+        val SDF = SimpleDateFormat("yyyy_mm_dd_hh_mm_ss", Locale.getDefault())
+        return SDF.format(Date()) + if (suffix == "") "" else "_${suffix}"
+    }
+
+    class CompressImage(
+            private val context: Context,
+            private val path: String,
+            private var image_width: Int,
+            private var image_height: Int,
+            private var image_quality: Int = 80,
+            private val image_name: String = generate_image_name("")
+    ) {
+
         private lateinit var format: Bitmap.CompressFormat
         private lateinit var extension: String
         private var destination: File? = null
 
         init {
-            this.image_width = 1200
-            this.image_height = 900
-            this.image_quality = 80
             this.formatJPEG()
             this.original_destination(File.separator + "Compressed")
-        }
-
-        fun height(image_height: Int): CompressImage {
-            this.image_height = image_height
-            return this
-        }
-
-        fun width(image_width: Int): CompressImage {
-            this.image_width = image_width
-            return this
-        }
-
-        fun quality(image_quality: Int): CompressImage {
-            this.image_quality = image_quality
-            return this
         }
 
         fun formatPNG(): CompressImage {
@@ -172,19 +165,26 @@ object ImageUtils {
             return this
         }
 
-        @Throws(IOException::class)
         fun compressImage(): File? {
             if (this.destination == null) {
                 return null
             }
-            //SDF to generate a unique name for our compress file.
-            val SDF = SimpleDateFormat("yyyy_mm_dd_hh_mm_ss", Locale.getDefault())
+
+            val original_bitmap = BitmapFactory.decodeFile(this.path)
+            if (this.image_height > original_bitmap.height || this.image_width > original_bitmap.width) {
+                this.image_width = original_bitmap.width
+                this.image_height = original_bitmap.height
+            } else if (this.image_width > 0) {
+                this.image_height = (this.image_width / original_bitmap.width) * original_bitmap.height
+            } else if (this.image_height > 0) {
+                this.image_width = (this.image_height / original_bitmap.height) * original_bitmap.width
+            }
 
             //decode and resize the original bitmap from @param path.
             val bitmap = decodeImageFromFiles(this.path, this.image_width, this.image_height)
 
-            //create placeholder for the compressed image file
-            val compressed = File(this.destination, SDF.format(Date()) + this.extension)
+            //create placeholder for the compressed image file // image_name
+            val compressed = File(this.destination, this.image_name + this.extension)
             //convert the decoded bitmap to stream
             val byteArrayOutputStream = ByteArrayOutputStream()
             /*compress bitmap into byteArrayOutputStream
