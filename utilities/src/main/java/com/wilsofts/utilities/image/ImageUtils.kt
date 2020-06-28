@@ -103,8 +103,8 @@ object ImageUtils {
     class CompressImage(
             private val context: Context,
             private val path: String,
-            private var image_width: Int,
-            private var image_height: Int,
+            private var image_width: Int = 600,
+            private var image_height: Int = 0,
             private var image_quality: Int = 80,
             private val image_name: String = generate_image_name("")
     ) {
