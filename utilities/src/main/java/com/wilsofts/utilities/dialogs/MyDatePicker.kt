@@ -9,6 +9,7 @@ import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -67,15 +68,13 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
         val format = SimpleDateFormat(this.pattern)
         val date = Date(calendar.timeInMillis)
 
-        val intent = Intent("date_time")
-        intent.putExtra("string_date", format.format(date))
-        intent.putExtra("epoch_date", calendar.timeInMillis / 1000)
-        LocalBroadcastManager.getInstance(this.activity!!).sendBroadcast(intent)
+        (this.requireArguments().getSerializable("receiver")!! as DateReceiver)
+                .receive(string_date = format.format(date), epoch_date = (calendar.timeInMillis / 1000))
     }
 
     companion object {
         fun newInstance(activity: FragmentActivity, current_date: Long = 0L, min_date: Long = 0L,
-                        max_date: Long = 0L, pattern: String = "EEE dd MMM yyyy") {
+                        max_date: Long = 0L, pattern: String = "EEE dd MMM yyyy", receiver: DateReceiver) {
 
             val dialog = MyDatePicker().apply {
                 this.arguments = Bundle().apply {
@@ -83,9 +82,14 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
                     this.putLong("max_date", max_date)
                     this.putLong("current_date", current_date)
                     this.putString("pattern", pattern)
+                    this.putSerializable("receiver", receiver)
                 }
             }
             dialog.show(activity.supportFragmentManager, "date_picker")
         }
+    }
+
+    interface DateReceiver: Serializable{
+        fun receive(string_date: String, epoch_date: Long)
     }
 }
