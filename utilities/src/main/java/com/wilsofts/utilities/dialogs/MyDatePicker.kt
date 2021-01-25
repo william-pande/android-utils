@@ -54,6 +54,7 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
         return dialog
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, year)
@@ -64,12 +65,12 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
 
-        @SuppressLint("SimpleDateFormat")
-        val format = SimpleDateFormat(this.pattern)
-        val date = Date(calendar.timeInMillis)
-
         (this.requireArguments().getSerializable("receiver")!! as DateReceiver)
-                .receive(string_date = format.format(date), epoch_date = (calendar.timeInMillis / 1000))
+                .receive(
+                        string_date = SimpleDateFormat(this.pattern).format(Date(calendar.timeInMillis)),
+                        epoch_date = (calendar.timeInMillis / 1000),
+                        server_date = SimpleDateFormat("yyyy-MM-dd").format(Date(calendar.timeInMillis))
+                )
     }
 
     companion object {
@@ -89,7 +90,7 @@ class MyDatePicker : DialogFragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-    interface DateReceiver: Serializable{
-        fun receive(string_date: String, epoch_date: Long)
+    interface DateReceiver : Serializable {
+        fun receive(string_date: String, epoch_date: Long, server_date: String)
     }
 }
