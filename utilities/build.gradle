@@ -26,12 +26,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility = JavaLanguageVersion.of(11)
+        targetCompatibility = JavaLanguageVersion.of(11)
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaLanguageVersion.of(11)
     }
 
     dataBinding {
