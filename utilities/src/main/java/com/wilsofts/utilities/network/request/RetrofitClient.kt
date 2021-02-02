@@ -1,6 +1,7 @@
 package com.wilsofts.utilities.network.request
 
 import android.content.Intent
+import android.util.Log
 import com.google.gson.GsonBuilder
 import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
@@ -26,8 +27,7 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
     }
 
     companion object {
-        /*retrofit with progress listener*/
-        fun getRetrofit(headers: Intent, url: String, listener: ProgressListener): Retrofit {
+        fun getRetrofit(headers: Intent, url: String, listener: ProgressListener? = null): Retrofit {
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -46,19 +46,21 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
                         }
                         chain.proceed(builder.build())
                     }
-                    .addNetworkInterceptor { chain ->
-                        val originalResponse = chain.proceed(chain.request())
-                        originalResponse.newBuilder()
-                                .body(ProgressUpdater.ProgressResponseBody(originalResponse.body!!, listener))
-                                .build()
-                    }
+
+            if (listener != null) {
+                builder.addNetworkInterceptor { chain ->
+                    val originalResponse = chain.proceed(chain.request())
+                    originalResponse.newBuilder()
+                            .body(ProgressUpdater.ProgressResponseBody(originalResponse.body!!, listener))
+                            .build()
+                }
+            }
 
             if (LibUtils.SHOW_LOG) {
                 builder.addInterceptor(OkHttpProfilerInterceptor())
             }
 
             val client = builder.build()
-
             return Retrofit.Builder()
                     .baseUrl(url)
                     .addConverterFactory(ScalarsConverterFactory.create())
@@ -68,6 +70,7 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
                     .build()
         }
 
+        /*retrofit with progress listener*/
         fun getRetrofit(headers: Intent, listener: ProgressListener): Retrofit {
             return getRetrofit(headers, LibUtils.URL_LINK, listener)
         }
@@ -77,55 +80,32 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
         }
 
         /*retrofit without progress dialog*/
-
-        fun getRetrofit(headers: Intent, url: String): Retrofit {
-            val interceptor = HttpLoggingInterceptor()
-            interceptor.level = HttpLoggingInterceptor.Level.BODY
-
-            val builder = OkHttpClient.Builder()
-                    .connectTimeout(LibUtils.CONNECT_TIMEOUT.toLong(), TimeUnit.SECONDS)
-                    .writeTimeout(LibUtils.WRITE_TIMEOUT.toLong(), TimeUnit.SECONDS)
-                    .readTimeout(LibUtils.READ_TIMEOUT.toLong(), TimeUnit.SECONDS)
-                    .addInterceptor { chain: Interceptor.Chain ->
-                        val builder = chain.request().newBuilder()
-
-                        val bundle = headers.extras
-                        if (bundle != null) {
-                            for (name in bundle.keySet()) {
-                                builder.addHeader(name, bundle.getString(name)!!)
-                            }
-                        }
-                        chain.proceed(builder.build())
-                    }
-
-            if (LibUtils.SHOW_LOG) {
-                builder.addInterceptor(OkHttpProfilerInterceptor())
-            }
-
-            val client = builder.build()
-
-            return Retrofit.Builder()
-                    .baseUrl(url)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .client(client)
-                    .build()
-        }
-
         fun getRetrofit(headers: Intent): Retrofit {
-            return getRetrofit(headers, LibUtils.URL_LINK)
+            return getRetrofit(headers = headers, url = LibUtils.URL_LINK)
         }
 
         fun getRetrofit(url: String): Retrofit {
-            return getRetrofit(Intent(), url)
+            return getRetrofit(headers = Intent(), url = url)
         }
 
         val retrofit: Retrofit
-            get() = getRetrofit(Intent(), LibUtils.URL_LINK)
+            get() = getRetrofit(headers = Intent(), url = LibUtils.URL_LINK)
 
         fun getBody(parameters: Map<String, Any>): RequestBody {
             return JSONObject(parameters).toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        }
+
+        fun logE(s: String) {
+            if (LibUtils.NET_LOG) {
+                Log.e("Network", s)
+            }
+        }
+
+        fun logE(throwable: Throwable) {
+            if (LibUtils.NET_LOG) {
+                Log.e("Network", throwable.message, throwable)
+            }
+            throwable.printStackTrace()
         }
     }
 

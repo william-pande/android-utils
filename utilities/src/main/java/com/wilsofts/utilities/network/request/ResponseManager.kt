@@ -18,8 +18,12 @@ class ResponseManager(private val call: Call<String>, val serverResponse: Retrof
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 try {
                     if (response.isSuccessful) {
-                        this@ResponseManager.serverResponse?.response(status = response.code(), response = JSONObject(), throwable = null)
-
+                        RetrofitClient.logE(JSONObject(response.body()!!).toString(2))
+                        this@ResponseManager.serverResponse?.response(
+                                status = response.code(),
+                                response = JSONObject(response.body()!!),
+                                throwable = null
+                        )
                     } else {
                         val error_body = response.errorBody()
                         if (error_body != null) {
@@ -33,6 +37,7 @@ class ResponseManager(private val call: Call<String>, val serverResponse: Retrof
                             }
                             val message = builder.toString()
                             val json = if (message.isNotEmpty()) JSONObject(message) else JSONObject()
+                            RetrofitClient.logE(json.toString(2))
                             this@ResponseManager.serverResponse?.response(status = response.code(), response = json, throwable = null)
                         } else {
                             this@ResponseManager.serverResponse?.response(status = response.code(),
@@ -44,6 +49,7 @@ class ResponseManager(private val call: Call<String>, val serverResponse: Retrof
                             status = response.code(), throwable = throwable,
                             response = JSONObject().put("error", throwable.localizedMessage)
                     )
+                    RetrofitClient.logE(throwable)
                 }
             }
 
@@ -54,6 +60,7 @@ class ResponseManager(private val call: Call<String>, val serverResponse: Retrof
                                 .put("error", throwable.localizedMessage)
                                 .put("network", throwable is IOException)
                 )
+                RetrofitClient.logE(throwable)
             }
         })
     }

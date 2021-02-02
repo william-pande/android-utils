@@ -10,6 +10,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +24,18 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun networkTest() {
-        LibUtils.SHOW_LOG = true
+        RetrofitClient(
+                call = RetrofitClient.getRetrofit("https://api.wooowshoes.com/")
+                        .create(Api::class.java).get_admin_items(),
+                serverResponse = object : RetrofitClient.ServerResponse {
+                    override fun response(status: Int, response: JSONObject, throwable: Throwable?) {
+                        LibUtils.logE(response.toString(2))
+                    }
+                }
+        )
+    }
+
+    private fun post_test() {
         RetrofitClient(
                 call = RetrofitClient.getRetrofit("https://api.ichuzz2work.com/").create(Api::class.java)
                         .login_user("pandewilliam100@gmail.com", "123456s789"),
@@ -39,5 +51,8 @@ class MainActivity : AppCompatActivity() {
         @FormUrlEncoded
         @POST("api/auth/login")
         fun login_user(@Field("email") username: String, @Field("password") password: String): Call<String>
+
+        @GET("admin/items")
+        fun get_admin_items(): Call<String>
     }
 }
