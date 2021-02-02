@@ -26,12 +26,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaLanguageVersion.of(11)
-        targetCompatibility = JavaLanguageVersion.of(11)
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = JavaLanguageVersion.of(11)
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
     dataBinding {
