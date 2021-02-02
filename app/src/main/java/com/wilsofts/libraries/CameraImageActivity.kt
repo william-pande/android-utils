@@ -12,7 +12,6 @@ import com.wilsofts.utilities.image.FilePath
 import com.wilsofts.utilities.image.ImageUtils
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
 
 class CameraImageActivity : AppCompatActivity() {
     private var binding: ActivityCameraImageBinding? = null

@@ -86,8 +86,8 @@ class AppUpdaterActivity : AppCompatActivity(), InstallStateUpdatedListener {
         }
     }
 
-    override fun onStateUpdate(installState: InstallState?) {
-        if (installState?.installStatus() == InstallStatus.DOWNLOADED) {
+    override fun onStateUpdate(state: InstallState) {
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
             notifyUser()
         }
     }

@@ -8,11 +8,11 @@ apply plugin: "kotlin-kapt"
 /*group = 'com.github.WilliamPande.android-utils'*/
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 2
         versionName "1.1"
         vectorDrawables.useSupportLibrary = true
@@ -46,13 +46,13 @@ ext {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // retrofit
     api 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -80,5 +80,5 @@ dependencies {
     /*for the http profiler*/
     api 'com.itkacher.okhttpprofiler:okhttpprofiler:1.0.7'
 
-    implementation 'com.google.android.play:core:1.6.4'
+    implementation 'com.google.android.play:core:1.9.1'
 }
