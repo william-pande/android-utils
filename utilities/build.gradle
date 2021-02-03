@@ -2,9 +2,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
-apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
 
-/*group = 'com.github.WilliamPande.android-utils'*/
+/*group = 'com.github.william-pande.android-utils'*/
 
 android {
     compileSdkVersion 30
