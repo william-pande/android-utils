@@ -3,12 +3,10 @@ package com.wilsofts.utilities.dialogs
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
