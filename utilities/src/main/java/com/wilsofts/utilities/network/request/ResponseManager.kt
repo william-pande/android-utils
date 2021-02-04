@@ -18,7 +18,7 @@ class ResponseManager(private val call: Call<String>, val serverResponse: Retrof
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 try {
                     if (response.isSuccessful) {
-                        RetrofitClient.logE(JSONObject(response.body()!!).toString(2))
+                        RetrofitClient.logE(response.body()!!)
                         this@ResponseManager.serverResponse?.response(
                                 status = response.code(),
                                 response = JSONObject(response.body()!!),

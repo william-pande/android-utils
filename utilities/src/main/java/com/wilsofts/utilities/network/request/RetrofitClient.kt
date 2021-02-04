@@ -135,6 +135,7 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
                     override fun read(sink: Buffer, byteCount: Long): Long {
                         val bytesRead = super.read(sink, byteCount)
                         val contentLength = this@ProgressResponseBody.responseBody.contentLength()
+
                         // read() returns the number of bytes read, or -1 if this source is exhausted.
                         this.totalBytesRead += if (bytesRead != -1L) bytesRead else 0
 
