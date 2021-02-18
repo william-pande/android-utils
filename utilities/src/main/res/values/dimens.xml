@@ -2,4 +2,5 @@
 <resources>
     <dimen name="alert_dialog_radius">0dp</dimen>
     <dimen name="alert_dialog_stroke_width">2dp</dimen>
+    <dimen name="select_padding">5dp</dimen>
 </resources>

@@ -118,7 +118,12 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
             }
 
             override fun contentLength(): Long {
-                return this.responseBody.contentLength()
+                //val size = responseBody.bytes().size.toLong()
+                val size = this.responseBody.contentLength()
+                //logE(responseBody.toString())
+                logE("Size = $size")
+                //logE("${responseBody.toString().length}")
+                return size
             }
 
             override fun source(): BufferedSource {
@@ -155,6 +160,10 @@ class RetrofitClient(call: Call<String>, serverResponse: ServerResponse? = null)
                 }
             }
         }
+    }
+
+    class RetroProgress {
+
     }
 
     interface ServerResponse {

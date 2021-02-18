@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import com.wilsofts.libraries.databinding.ActivityCameraImageBinding
 import com.wilsofts.utilities.LibUtils
 import com.wilsofts.utilities.image.FilePath
@@ -14,16 +13,17 @@ import java.io.File
 import java.io.IOException
 
 class CameraImageActivity : AppCompatActivity() {
-    private var binding: ActivityCameraImageBinding? = null
+    private lateinit var binding: ActivityCameraImageBinding
 
     //for storing captured image path
     private var currentPhotoPath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.binding = DataBindingUtil.setContentView(this, R.layout.activity_camera_image)
+        this.binding = ActivityCameraImageBinding.inflate(this.layoutInflater)
+        this.setContentView(this.binding.root)
 
-        this.binding!!.photoCamera.setOnClickListener {
+        this.binding.photoCamera.setOnClickListener {
             try {
                 val image_file = ImageUtils.createImageFile(this, "LibTest")
                 if (image_file != null) {
@@ -38,7 +38,7 @@ class CameraImageActivity : AppCompatActivity() {
             }
         }
 
-        this.binding!!.photoLibrary.setOnClickListener {
+        this.binding.photoLibrary.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
             this.startActivityForResult(intent, ImageUtils.IMAGE_GALLERY)
@@ -53,7 +53,7 @@ class CameraImageActivity : AppCompatActivity() {
                     val file = File(this.currentPhotoPath!!)
                     if (file.exists()) {
                         val myBitmap = BitmapFactory.decodeFile(file.absolutePath)
-                        this.binding!!.imageView.setImageBitmap(myBitmap)
+                        this.binding.imageView.setImageBitmap(myBitmap)
 
                         /* try {
                              val compressed = ImageUtils.fileToBase64(this, file, 500, 500)

@@ -15,6 +15,10 @@
     <color name="alert_positive_color">@color/colorAccent</color>
     <color name="alert_negative_color">@color/colorAccent</color>
     <color name="alert_neutral_cream">@color/colorAccent</color>
+
     <color name="cancel_multi_select">#FF5500</color>
     <color name="proceed_multi_select">#000000</color>
+    <color name="select_background">#D6D4D4</color>
+    <color name="select_check_color">#000000</color>
+    <color name="select_stroke">#000000</color>
 </resources>

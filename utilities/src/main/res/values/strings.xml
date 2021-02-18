@@ -11,4 +11,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="select_all">Select All</string>
+    <string name="select_check_all">Select All</string>
+    <string name="select_close">Close Selection</string>
+    <string name="select_use">Use Selection</string>
 </resources>

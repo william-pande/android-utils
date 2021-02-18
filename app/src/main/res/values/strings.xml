@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Libraries</string>
     <string name="camera_image_text">Camera Image Text</string>
+    <string name="select_capture_image">Select an image</string>
+    <string name="permission_not_granted">Permission not granted</string>
+    <string name="some_err">Some error occured</string>
 </resources>

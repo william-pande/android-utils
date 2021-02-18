@@ -5,6 +5,10 @@
         path="Android/data/com.wilsofts.libraries/files/Pictures" />
 
     <external-path
+        name="my_images"
+        path="Android/data/com.wilsofts.libraries/files/DCIM" />
+
+    <external-path
         name="captured_images"
         path="DCIM/LibTest" />
 </paths>
