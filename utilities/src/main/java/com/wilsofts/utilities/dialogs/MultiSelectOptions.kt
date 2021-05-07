@@ -28,6 +28,8 @@ class MultiSelectOptions : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         this.binding = DialogMultiSelectOptionsBinding.inflate(inflater, container, false)
 
+        this.binding.filterText.visibility = if (this.requireArguments().getBoolean("showSearch")) View.VISIBLE else View.GONE
+
         this.original_items.addAll(this.requireArguments().getParcelableArrayList("select_items")!!)
         this.filter_items.addAll(this.original_items)
 
@@ -80,13 +82,14 @@ class MultiSelectOptions : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(select_items: ArrayList<MultiSelect>, manager: FragmentManager,
+        fun newInstance(select_items: ArrayList<MultiSelect>, manager: FragmentManager, showSearch: Boolean = false,
                         multi_receiver: MultiReceiver? = null, single_select: SingleSelect? = null) {
             val dialog = MultiSelectOptions()
             Bundle().apply {
                 this.putParcelableArrayList("select_items", select_items)
                 this.putSerializable("multi_receiver", multi_receiver)
                 this.putSerializable("single_select", single_select)
+                this.putBoolean("showSearch", showSearch)
                 dialog.arguments = this
             }
             dialog.show(manager, "option_dialog")
@@ -142,10 +145,10 @@ class MultiSelectOptions : BottomSheetDialogFragment() {
             LibUtils.logE("Clear Size ${items.size}")
 
             original_items.forEach {
-               if(it.item_id.toLowerCase(Locale.getDefault()).contains(search.toLowerCase(Locale.getDefault())) ||
-                       it.item_text.toLowerCase(Locale.getDefault()).contains(search.toLowerCase(Locale.getDefault()))){
-                   items.add(it)
-               }
+                if (it.item_id.toLowerCase(Locale.getDefault()).contains(search.toLowerCase(Locale.getDefault())) ||
+                        it.item_text.toLowerCase(Locale.getDefault()).contains(search.toLowerCase(Locale.getDefault()))) {
+                    items.add(it)
+                }
             }
             LibUtils.logE("Filter Size ${items.size}")
             this.notifyDataSetChanged()
