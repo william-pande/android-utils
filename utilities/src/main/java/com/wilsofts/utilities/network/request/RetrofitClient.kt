@@ -3,7 +3,7 @@ package com.wilsofts.utilities.network.request
 import android.content.Intent
 import android.util.Log
 import com.google.gson.GsonBuilder
-import com.itkacher.okhttpprofiler.OkHttpProfilerInterceptor
+import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import com.wilsofts.utilities.LibUtils
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
